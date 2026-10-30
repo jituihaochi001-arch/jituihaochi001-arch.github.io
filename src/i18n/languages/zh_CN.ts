@@ -58,7 +58,7 @@ export const zh_CN: Translation = {
 	[Key.searchFriends]: "搜索友链...",
 	[Key.friendsEmpty]: "暂无友情链接",
 	[Key.guestbook]: "留言",
-	[Key.guestbookDescription]: "这里收着朋友们留下的话，只做展示，不开放提交。",
+	[Key.guestbookDescription]: "这里收着留下的话，只做展示，不开放提交。",
 	[Key.untitled]: "无标题",
 	[Key.uncategorized]: "未分类",
 	[Key.noTags]: "无标签",
