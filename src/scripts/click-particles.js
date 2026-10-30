@@ -1,7 +1,9 @@
 export {};
 
 const SPARKLE_COLOR = "255, 252, 240";
+const TRAIL_COLOR = "32, 164, 205";
 const MAX_PARTICLES = 260;
+const TRAIL_STEP = 10;
 
 (() => {
 	if (window.__aemeathClickParticles) return;
@@ -33,6 +35,23 @@ const MAX_PARTICLES = 260;
 	let frameId = 0;
 	let lastFrame = 0;
 	let lastSpawn = 0;
+	let dragging = false;
+	let lastTrail = null;
+
+	const random = (min, max) => min + Math.random() * (max - min);
+
+	function pushParticle(particle) {
+		particles.push(particle);
+		if (particles.length > MAX_PARTICLES) {
+			particles.splice(0, particles.length - MAX_PARTICLES);
+		}
+	}
+
+	function startLoop() {
+		if (frameId) return;
+		lastFrame = performance.now();
+		frameId = requestAnimationFrame(tick);
+	}
 
 	function spawn(x, y) {
 		const now = performance.now();
@@ -42,48 +61,85 @@ const MAX_PARTICLES = 260;
 		const count = 10 + Math.round(Math.random() * 6);
 		for (let i = 0; i < count; i++) {
 			const angle = Math.random() * Math.PI * 2;
-			const speed = 0.04 + Math.random() * 0.22;
-			particles.push({
+			const speed = random(0.04, 0.26);
+			pushParticle({
 				x,
 				y,
 				vx: Math.cos(angle) * speed,
 				vy: Math.sin(angle) * speed - 0.03,
-				gravity: 0.00008 + Math.random() * 0.00012,
-				drag: 0.004 + Math.random() * 0.003,
-				size: 2.4 + Math.random() * 4.2,
+				gravity: random(0.00008, 0.0002),
+				drag: random(0.004, 0.007),
+				size: random(2.4, 6.6),
 				rotation: Math.random() * Math.PI,
 				spin: (Math.random() - 0.5) * 0.008,
 				twinklePhase: Math.random() * Math.PI * 2,
-				twinkleSpeed: 0.012 + Math.random() * 0.012,
+				twinkleSpeed: random(0.012, 0.024),
 				life: 0,
-				maxLife: 420 + Math.random() * 380,
+				maxLife: random(420, 800),
 			});
 		}
-		if (particles.length > MAX_PARTICLES) {
-			particles.splice(0, particles.length - MAX_PARTICLES);
+		startLoop();
+	}
+
+	// 按住拖拽时沿指针轨迹洒下碎星星
+	function spawnTrail(x, y) {
+		for (let i = 0; i < 3; i++) {
+			pushParticle({
+				x: x + random(-8, 8),
+				y: y + random(-8, 8),
+				vx: random(-0.03, 0.03),
+				vy: random(-0.05, -0.01),
+				gravity: 0.00004,
+				drag: random(0.006, 0.01),
+				size: random(4, 7.5),
+				rotation: Math.random() * Math.PI,
+				spin: (Math.random() - 0.5) * 0.006,
+				twinklePhase: Math.random() * Math.PI * 2,
+				twinkleSpeed: random(0.014, 0.028),
+				life: 0,
+				maxLife: random(420, 820),
+				tinted: true,
+			});
 		}
-		if (!frameId) {
-			lastFrame = now;
-			frameId = requestAnimationFrame(tick);
+		startLoop();
+	}
+
+	function traceTrail(x, y) {
+		if (!lastTrail) {
+			lastTrail = { x, y };
+			spawnTrail(x, y);
+			return;
 		}
+		const dx = x - lastTrail.x;
+		const dy = y - lastTrail.y;
+		const distance = Math.hypot(dx, dy);
+		if (distance < TRAIL_STEP) return;
+		// 快速划动时按固定间距补点，拖尾才不会断成一截一截
+		const steps = Math.min(Math.floor(distance / TRAIL_STEP), 6);
+		for (let i = 1; i <= steps; i++) {
+			spawnTrail(lastTrail.x + (dx * i) / steps, lastTrail.y + (dy * i) / steps);
+		}
+		lastTrail = { x, y };
 	}
 
 	function drawSparkle(p, alpha) {
 		const len = p.size;
-		const width = Math.max(0.7, len * 0.16);
+		// 点击爆发按深色壁纸调成白光；拖尾会落在白卡片上，改用主题青色才看得见
+		const tinted = p.tinted;
+		const width = Math.max(tinted ? 1 : 0.7, len * (tinted ? 0.2 : 0.16));
 
 		ctx.save();
-		ctx.globalCompositeOperation = "lighter";
+		ctx.globalCompositeOperation = tinted ? "source-over" : "lighter";
 		ctx.translate(p.x, p.y);
 		ctx.rotate(p.rotation);
-		ctx.fillStyle = `rgb(${SPARKLE_COLOR})`;
+		ctx.fillStyle = `rgb(${tinted ? TRAIL_COLOR : SPARKLE_COLOR})`;
 
-		ctx.globalAlpha = alpha * 0.16;
+		ctx.globalAlpha = alpha * (tinted ? 0.18 : 0.16);
 		ctx.beginPath();
 		ctx.arc(0, 0, len * 0.85, 0, Math.PI * 2);
 		ctx.fill();
 
-		ctx.globalAlpha = alpha * 0.95;
+		ctx.globalAlpha = tinted ? Math.min(1, alpha * 1.15) : alpha * 0.95;
 		ctx.beginPath();
 		ctx.moveTo(0, -len);
 		ctx.lineTo(width, 0);
@@ -102,6 +158,7 @@ const MAX_PARTICLES = 260;
 		ctx.fill();
 
 		ctx.rotate(-Math.PI / 2);
+		ctx.fillStyle = `rgb(${tinted ? TRAIL_COLOR : SPARKLE_COLOR})`;
 		ctx.globalAlpha = Math.min(1, alpha * 1.2);
 		ctx.beginPath();
 		ctx.arc(0, 0, Math.max(0.8, len * 0.2), 0, Math.PI * 2);
@@ -154,8 +211,42 @@ const MAX_PARTICLES = 260;
 			// Swup 替换 body 后画布会脱离文档，点击时重新挂载。
 			if (!canvas.isConnected) document.body.appendChild(canvas);
 			spawn(event.clientX, event.clientY);
+			if (event.pointerType === "mouse") {
+				dragging = true;
+				lastTrail = { x: event.clientX, y: event.clientY };
+				spawnTrail(event.clientX, event.clientY);
+			}
 		},
 		{ capture: true, passive: true },
+	);
+
+	window.addEventListener(
+		"pointermove",
+		(event) => {
+			if (!dragging || (event.buttons & 1) === 0) return;
+			if (!canvas.isConnected) document.body.appendChild(canvas);
+			traceTrail(event.clientX, event.clientY);
+		},
+		{ capture: true, passive: true },
+	);
+
+	const stopDrag = () => {
+		dragging = false;
+		lastTrail = null;
+	};
+	window.addEventListener("pointerup", stopDrag, { capture: true, passive: true });
+	window.addEventListener("pointercancel", stopDrag, { capture: true, passive: true });
+	window.addEventListener("blur", stopDrag);
+
+	// 图片默认可以原生拖拽，拖动时会冒出“禁止”光标；拦掉原生拖拽，只保留星星拖尾
+	document.addEventListener(
+		"dragstart",
+		(event) => {
+			if (event.target instanceof Element && event.target.closest("img")) {
+				event.preventDefault();
+			}
+		},
+		{ capture: true },
 	);
 
 	document.addEventListener("visibilitychange", () => {
@@ -163,6 +254,7 @@ const MAX_PARTICLES = 260;
 			if (frameId) cancelAnimationFrame(frameId);
 			frameId = 0;
 			particles.length = 0;
+			stopDrag();
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 		} else {
 			resize();
