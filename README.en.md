@@ -1,11 +1,11 @@
 <div align="center">
-  <h1>Aemeath</h1>
-  <p><strong>朝朝听雨 · 物物而不物于物，念念而不念于念</strong></p>
-  <p>A personal blog built with Astro 7, with Aemeath and Pure themes.</p>
+  <h1>Jitui's Portfolio</h1>
+  <p><strong>Indie game developer who loves vibecoding small games.</strong></p>
+  <p>A personal portfolio remixed from the Aemeath theme, statically built with Astro and hosted on GitHub Pages.</p>
   <p>
-    <a href="https://rainzt.cn/">Visit the blog</a> ·
-    <a href="https://github.com/Jarvis0227/Aemeath">GitHub</a> ·
-    <a href="https://github.com/Jarvis0227/Aemeath/issues">Report an issue</a>
+    <a href="https://jituihaochi001-arch.github.io/">Live site</a> ·
+    <a href="https://github.com/jituihaochi001-arch/jituihaochi001-arch.github.io">Repository</a> ·
+    <a href="https://github.com/jituihaochi001-arch/jituihaochi001-arch.github.io/issues">Issues</a>
   </p>
   <p>
     <a href="https://astro.build/"><img src="https://img.shields.io/badge/Astro-7-BC52EE?logo=astro&logoColor=white" alt="Astro 7"></a>
@@ -14,170 +14,162 @@
     <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript">
     <img src="https://img.shields.io/badge/Node.js-%3E%3D22.12-339933?logo=node.js&logoColor=white" alt="Node.js 22.12+">
     <img src="https://img.shields.io/badge/pnpm-9-F69220?logo=pnpm&logoColor=white" alt="pnpm 9">
+    <img src="https://img.shields.io/badge/GitHub%20Pages-live-2EA44F?logo=githubpages&logoColor=white" alt="GitHub Pages">
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-97CA00" alt="MIT License"></a>
   </p>
   <p><a href="README.md">简体中文</a> · <strong>English</strong></p>
 </div>
 
 <p align="center">
-  <a href="#theme-previews">Theme previews</a> ·
-  <a href="#features">Features</a> ·
-  <a href="#getting-started">Getting started</a> ·
-  <a href="#content-and-configuration">Configuration</a> ·
-  <a href="#project-structure">Project structure</a> ·
-  <a href="#license-and-credits">Credits</a>
+  <a href="#preview">Preview</a> ·
+  <a href="#overview">Overview</a> ·
+  <a href="#pages">Pages</a> ·
+  <a href="#local-development">Local development</a> ·
+  <a href="#deployment">Deployment</a> ·
+  <a href="#content-and-config">Content and config</a> ·
+  <a href="#project-layout">Project layout</a> ·
+  <a href="#credits">Credits</a>
 </p>
 
-## Theme previews
+## Preview
 
-### Aemeath · Wallpapers, cards and a personal homepage
+### Home · wallpaper and profile card
 
-A full-screen wallpaper, an introduction card, character decorations and sidebar widgets give the homepage its own atmosphere.
+A full-screen wallpaper with an avatar, name, one-line bio and social links; the rest of the page lists projects and notes.
 
 <p align="center">
-  <a href="https://rainzt.cn/?siteTheme=aemeath">
-    <img src="docs/images/home-aemeath.png" alt="Aemeath homepage with a full-screen wallpaper, introduction card, top navigation and character decorations" width="100%">
+  <a href="https://jituihaochi001-arch.github.io/">
+    <img src="docs/images/jitui-home.png" alt="Home page: full-screen wallpaper, profile card, social links and falling stars" width="100%">
   </a>
 </p>
 
-<p align="center"><a href="https://rainzt.cn/?siteTheme=aemeath">Explore Aemeath →</a></p>
+### About · profile, skills and projects
 
-### Pure · Simple navigation and a focus on reading
-
-Whitespace, article previews and lightly bordered cards organize the page, with a profile and recent comments alongside the post list.
+A profile card and sidebar widgets on the left, the public README, skill wall, personal projects and a remix notice on the right.
 
 <p align="center">
-  <a href="https://rainzt.cn/?siteTheme=pure">
-    <img src="docs/images/home-pure.png" alt="Pure homepage with simple navigation, article previews, fading covers and a profile sidebar" width="100%">
+  <a href="https://jituihaochi001-arch.github.io/about/">
+    <img src="docs/images/jitui-about.png" alt="About page: profile card, README excerpt, skill wall, sidebar and project entries" width="100%">
   </a>
 </p>
 
-<p align="center"><a href="https://rainzt.cn/?siteTheme=pure">Explore Pure →</a></p>
+> Screenshots come from the live site. Modules that need external services, such as comments and traffic stats, stay in an empty state until configured.
 
-| | Aemeath | Pure |
+## Overview
+
+This repository holds the full source of the portfolio. It collects the games and demos I have shipped, the tools I work with, and a way to reach me: the home page sets the tone, the archive lists projects over time, the about page details skills and personal work, and the guestbook is display-only.
+
+Content lives in `src/content/` as Markdown and MDX and is turned into static pages at build time — no database, no runtime service. Comment and analytics integrations ship with the theme but stay unconfigured, so the footer shows a "not configured" placeholder.
+
+## Pages
+
+| Page | Route | Content |
 | --- | --- | --- |
-| Homepage | Wallpaper, personal introduction and content cards | Article list with descriptions and covers |
-| Layout | Multiple sidebars and decorative widgets | Simple navigation and a reading sidebar |
-| Appearance | Wallpapers, hue, cards and display preferences | Whitespace, light borders and clear text hierarchy |
-| Shared content | One set of posts, pages, navigation, comments and configuration | The same content and routes after switching themes |
+| Home | `/` | Wallpaper, profile card, social links and site stats |
+| Archive | `/archive/` | Projects and posts, filterable by category and tag |
+| About | `/about/` | Profile, skill wall, personal projects and a remix notice |
+| Guestbook | `/guestbook/` | Display-only message wall |
+| Post | `/posts/<slug>/` | Markdown article with table of contents and sharing |
+| Search | `/search/` | Full-text index generated by Pagefind |
+| Feeds | `/rss.xml`, `/sitemap-index.xml`, `/robots.txt` | RSS, sitemap and crawler rules |
 
-Use the theme control in the navigation bar to switch layouts. Theme selection is saved separately from light/dark mode. Set the default in [`src/config/siteThemeConfig.ts`](src/config/siteThemeConfig.ts); see the [theme guide](docs/site-themes.md) for details.
+Navigation stays at four entries — Home, Works, About, Guestbook — defined in [`navBarConfig.ts`](src/config/navBarConfig.ts). Theme pages such as friends, gallery, bangumi and sponsor are disabled in the `pages` section of [`siteConfig.ts`](src/config/siteConfig.ts) and can be switched on individually.
 
-> These screenshots show the author's live blog. Posts, comments, visitor counts and profile details illustrate the finished site. The public edition keeps the pages and components, with empty content templates and service connections ready for your own data.
+## Local development
 
-## About
-
-Aemeath is the open-source project behind Rain's personal blog, [rainzt.cn](https://rainzt.cn/). Built with **Astro 7, Svelte and TypeScript**, it brings writing, a personal homepage and everyday collections into one site, with content stored in Markdown / MDX.
-
-Both themes use the same posts and configuration. Start with the empty template, replace the profile and wallpapers, then add your posts, friends, albums and other page content.
-
-## Features
-
-<table>
-  <tr>
-    <td width="33%"><strong>🎨 Themes and appearance</strong><br>Aemeath / Pure switching, light and dark modes, fonts, hue, wallpapers and responsive layouts.</td>
-    <td width="33%"><strong>✍️ Writing and reading</strong><br>Markdown / MDX, categories, tags, archives, Pagefind search, RSS and article navigation.</td>
-    <td width="33%"><strong>🧭 Personal pages</strong><br>About, projects, friends, friend feeds, guestbook, tools and changelogs.</td>
-  </tr>
-  <tr>
-    <td><strong>🖼️ Collections and records</strong><br>Galleries, anime tracking, music, sponsorship and bill charts, ready for your own content.</td>
-    <td><strong>💬 Comments and site data</strong><br>Comment providers, emoji and label displays, analytics, friend-response probes and status displays.</td>
-    <td><strong>📝 Local authoring</strong><br>Post scaffolding, a local editor, content checks, image and font processing, and static builds.</td>
-  </tr>
-</table>
-
-Comments, analytics and some status displays require your own services. Pages show configuration guidance or an empty state until those services are configured.
-
-## Getting started
-
-Requirements: **Node.js 22.12 or later** and **pnpm 9**.
+Requires **Node.js 22.12 or newer** and **pnpm 9**.
 
 ```sh
-git clone https://github.com/Jarvis0227/Aemeath.git
-cd Aemeath
+git clone https://github.com/jituihaochi001-arch/jituihaochi001-arch.github.io.git
+cd jituihaochi001-arch.github.io
 pnpm install
 pnpm dev
 ```
 
-The development server runs at `http://localhost:4321` by default. Configure your site profile, then create your first post.
-
-### Commands
+The dev server runs at `http://localhost:4321` by default.
 
 | Command | Purpose |
 | --- | --- |
-| `pnpm dev` | Start the development server |
-| `pnpm new-post <filename>` | Create a post under `src/content/posts/` |
-| `pnpm post-studio` | Start the local post editor |
-| `pnpm check` | Run Astro diagnostics and synchronize content types |
-| `pnpm type-check` | Run TypeScript checks |
-| `pnpm build` | Build the site, optimized assets and Pagefind index |
+| `pnpm dev` | Start the dev server |
+| `pnpm new-post <name>` | Create a post under `src/content/posts/` |
+| `pnpm check` | Run Astro diagnostics |
+| `pnpm type-check` | Run the TypeScript checker |
+| `pnpm build` | Generate icons and placeholders, build the site, subset fonts and index it with Pagefind |
 | `pnpm preview` | Preview the production build |
-| `pnpm friend-latency` | Generate a friend-response snapshot |
 
-## Content and configuration
+## Deployment
 
-### Make the site yours
+The build is fully static and published to GitHub Pages by GitHub Actions.
 
-| Configuration | Purpose |
+- Pushing to `main` triggers [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml): install, build, upload the artifact, deploy. It can also be started manually from the Actions tab.
+- [`actions/configure-pages`](https://github.com/actions/configure-pages) injects `PUBLIC_SITE_URL` and `BASE_PATH`; `astro.config.mjs` and `siteConfig.ts` consume them for canonical URLs, RSS and in-site asset links, so the domain never has to be hard-coded.
+- The site must live at the root path: either name the repository `<user>.github.io` or attach a custom domain. Some in-site links are absolute to `/`, so deploying under `/<repo>/` would 404 — a guard step in the workflow fails early with that explanation.
+- [`.github/workflows/build.yml`](.github/workflows/build.yml) (Build and Check) runs Astro checks and a build on push and pull requests.
+
+## Content and config
+
+Site settings live in `src/config/`:
+
+| File | Purpose |
 | --- | --- |
-| [`siteConfig.ts`](src/config/siteConfig.ts) | Title, domain, language, start date and page switches |
-| [`profileConfig.ts`](src/config/profileConfig.ts) | Name, avatar, bio and social links |
-| [`siteThemeConfig.ts`](src/config/siteThemeConfig.ts) | Default theme and theme-switch control |
-| [`navBarConfig.ts`](src/config/navBarConfig.ts) | Navigation labels, order and menus |
-| [`backgroundWallpaper.ts`](src/config/backgroundWallpaper.ts), [`fontConfig.ts`](src/config/fontConfig.ts) | Wallpapers, background video and fonts |
-| [`friendsConfig.ts`](src/config/friendsConfig.ts), [`galleryConfig.ts`](src/config/galleryConfig.ts) | Friends, RSS and galleries |
-| [`commentConfig.ts`](src/config/commentConfig.ts), [`analyticsConfig.ts`](src/config/analyticsConfig.ts) | Comments and analytics services |
-| [`serviceConfig.ts`](src/config/serviceConfig.ts) | Optional server metrics, friend status, comment labels, administration and location services |
-| [`footerConfig.ts`](src/config/footerConfig.ts), [`FooterConfig.html`](src/config/FooterConfig.html) | Footer content and registration links |
-| [`musicConfig.ts`](src/config/musicConfig.ts), [`sponsorConfig.ts`](src/config/sponsorConfig.ts) | Music and sponsorship |
-| [`billsSummary.json`](src/data/billsSummary.json) | Bill data template |
+| [`siteConfig.ts`](src/config/siteConfig.ts) | Title, domain, language, start date, navbar style and page switches |
+| [`profileConfig.ts`](src/config/profileConfig.ts) | Name, avatar, one-line bio and social links |
+| [`navBarConfig.ts`](src/config/navBarConfig.ts) | Navigation labels, order and icons |
+| [`backgroundWallpaper.ts`](src/config/backgroundWallpaper.ts) | Home wallpapers, background images and foreground decor |
+| [`siteThemeConfig.ts`](src/config/siteThemeConfig.ts) | Default theme and theme switcher |
+| [`effectsConfig.ts`](src/config/effectsConfig.ts) | Falling effect settings (stars, sakura, rain) |
+| [`musicConfig.ts`](src/config/musicConfig.ts) | Sidebar playlist |
+| [`commentConfig.ts`](src/config/commentConfig.ts), [`analyticsConfig.ts`](src/config/analyticsConfig.ts) | Comment and analytics services, empty by default |
 
-Replace `https://example.com` in `site_url` with your domain and set your own start date. Independent About, friends and guestbook content lives in [`src/content/spec/`](src/content/spec/). Fill in the About-page projects and tool lists as needed.
+Page-level copy lives in `src/content/`:
 
-### Add your first post
+| Content | Location |
+| --- | --- |
+| About page body (skills, favorite games) | [`src/content/spec/about.md`](src/content/spec/about.md) |
+| About page remix notice | [`src/content/spec/about-open-source.md`](src/content/spec/about-open-source.md) |
+| Guestbook entries | [`src/content/spec/guestbook.md`](src/content/spec/guestbook.md) |
+| Posts and project notes | [`src/content/posts/`](src/content/posts/) |
 
-Run `pnpm new-post my-first-post.md`, then write Markdown or MDX under [`src/content/posts/`](src/content/posts/). A minimal frontmatter example:
+Posts accept Markdown or MDX; frontmatter needs at least `title`, `published` and `description`, and may include `tags`, `category`, `image` and `draft`.
 
-```yaml
----
-title: My first post
-published: 2026-10-29
-description: A short introduction to this post
-image: ""
-tags: [Notes]
-category: Journal
-draft: true
----
-```
-
-Set `draft` to `false` when ready to publish, then run `pnpm check`, `pnpm type-check` and `pnpm build`. Article-scene components retain their animation structure and accept your own text and images through component properties.
-
-### Connect services and add data
-
-Comments and analytics are disabled by default. Configure your own services in their respective files to enable them. Endpoints in `serviceConfig.ts` are empty by default; custom comment labels, friend status and related features require a compatible backend.
-
-Posts, friends, galleries, music and bill data start empty or as templates. Keep the bill file's structure when adding your own records. Build output, local debugging files, comment servers and deployment operations are managed separately.
-
-## Project structure
+## Project layout
 
 ```text
 src/
-├── config/       Site and theme configuration
-├── content/      Posts and independent page content
+├── config/       Site, navigation, wallpaper, effects and theme settings
+├── content/      Posts and standalone page content
 ├── components/   Astro and Svelte components
 ├── layouts/      Page layouts
-├── pages/        Routes and static APIs
+├── pages/        Routes and static endpoints
 ├── styles/       Global and component styles
-└── data/         Site data templates
-public/           Website static assets
-scripts/          Build and authoring tools
+├── scripts/      Interaction scripts (click particles, falling effects)
+├── plugins/      Markdown and build plugins
+└── data/         Site data
+public/           Static assets: avatar, wallpapers, fonts and icons
+scripts/          Build and content helpers
 docs/
-├── images/       README theme previews
-└── licenses/     Third-party licenses and notices
+├── images/       README screenshots
+└── licenses/     Third-party licenses
+.github/
+└── workflows/    Checks and Pages deployment
 ```
 
-## License and credits
+## Credits
 
-Aemeath builds on [CuteLeaf / Firefly](https://github.com/CuteLeaf/Firefly) and [saicaca / Fuwari](https://github.com/saicaca/fuwari). Thank you to the original authors and contributors. The Pure layouts adapt [Astro Theme Pure](https://github.com/cworld1/astro-theme-pure) and retain its [Apache-2.0 notice](docs/licenses/astro-theme-pure-LICENSE.txt).
+This site is not written from scratch. It is a remix of [Jarvis0227 / Aemeath](https://github.com/Jarvis0227/Aemeath), which in turn descends from [CuteLeaf / Firefly](https://github.com/CuteLeaf/Firefly) and [saicaca / Fuwari](https://github.com/saicaca/fuwari). The layout, components and most styles come from those authors — many thanks to them.
 
-See the [MIT License](LICENSE) for project code and [`docs/licenses/`](docs/licenses/) for third-party notices. Characters, wallpapers, music and other third-party assets remain subject to their respective rights and licenses.
+What I changed here:
+
+- Copy and positioning: title, bio, navigation, about page and guestbook content
+- Visual assets: avatar, home wallpaper and foreground decor
+- About page: skill wall, personal project cards and a remix notice card
+- Interaction details: star particles on click and while dragging
+- Hosting: moved to static GitHub Pages instead of the theme author's own environment
+
+Licensing:
+
+- Theme code is under the [MIT License](LICENSE); third-party notices are in [`docs/licenses/`](docs/licenses/)
+- Site text and images follow the CC BY-NC-SA 4.0 notice shown in the footer
+- Character art, wallpapers and music remain the property of their respective owners — check their licenses before redistributing
+
+If you build on this repository, please keep the upstream author and license notices.
