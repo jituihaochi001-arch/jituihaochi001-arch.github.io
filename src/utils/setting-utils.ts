@@ -13,9 +13,10 @@ import type { LIGHT_DARK_MODE, WALLPAPER_MODE } from "@/types/config";
 import {
 	backgroundWallpaper,
 	expressiveCodeConfig,
-	sakuraConfig,
+	fallingEffectConfig,
 	siteConfig,
 } from "../config";
+import type { FallingEffectMode } from "@/types/effectsConfig";
 import {
 	alternateHomepageWallpaper,
 	homepageWallpaper,
@@ -261,15 +262,8 @@ export function getHue(): number {
 }
 
 export function getNationalDayThemeEnabled(): boolean {
-	if (typeof window === "undefined") {
-		return nationalDayTheme.defaultEnabled;
-	}
-	try {
-		const stored = window.localStorage.getItem(NATIONAL_DAY_THEME_KEY);
-		return stored === null ? nationalDayTheme.defaultEnabled : stored === "true";
-	} catch {
-		return document.documentElement.dataset.nationalDayTheme !== "false";
-	}
+	// 本站未配置国庆壁纸，旧版本遗留的偏好不能再影响壁纸轮播。
+	return nationalDayTheme.defaultEnabled;
 }
 
 export function setNationalDayThemeEnabled(enabled: boolean): void {
@@ -1666,34 +1660,40 @@ export function applyGradientEnabledToDocument(enabled: boolean): void {
 	}
 }
 
-// Sakura effect functions
-export function getDefaultSakuraEnabled(): boolean {
-	return sakuraConfig?.enable ?? false;
+// Falling effect (sakura / stars / rain) functions
+const FALLING_EFFECT_MODES: FallingEffectMode[] = [
+	"none",
+	"sakura",
+	"stars",
+	"rain",
+];
+
+export function getDefaultFallingEffectMode(): FallingEffectMode {
+	return fallingEffectConfig?.defaultMode ?? "none";
 }
 
-export function getStoredSakuraEnabled(): boolean {
+export function getStoredFallingEffectMode(): FallingEffectMode {
 	if (typeof localStorage === "undefined") {
-		return getDefaultSakuraEnabled();
+		return getDefaultFallingEffectMode();
 	}
-	const stored = localStorage.getItem("sakuraEnabled");
-	if (stored === null) {
-		return getDefaultSakuraEnabled();
+	const stored = localStorage.getItem("fallingEffectMode") as FallingEffectMode | null;
+	if (!stored || !FALLING_EFFECT_MODES.includes(stored)) {
+		return getDefaultFallingEffectMode();
 	}
-	return stored === "true";
+	return stored;
 }
 
-export function setSakuraEnabled(enabled: boolean): void {
+export function setFallingEffectMode(mode: FallingEffectMode): void {
 	if (
 		typeof localStorage === "undefined" ||
 		typeof localStorage.setItem !== "function"
 	) {
 		return;
 	}
-	localStorage.setItem("sakuraEnabled", String(enabled));
-	document.documentElement.setAttribute("data-sakura-enabled", String(enabled));
-	// 实时切换樱花特效
+	localStorage.setItem("fallingEffectMode", mode);
+	document.documentElement.setAttribute("data-falling-effect", mode);
 	window.dispatchEvent(
-		new CustomEvent("sakuraToggle", { detail: { enabled } }),
+		new CustomEvent("fallingEffectChange", { detail: { mode } }),
 	);
 }
 

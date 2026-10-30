@@ -1,7 +1,5 @@
 ---
 import { Icon } from "astro-icon/components";
-import animalsImage from "@/assets/images/footer-animals.webp";
-import baishanCloudIcon from "@/assets/images/baishan-cloud.svg";
 import { footerConfig, analyticsConfig, profileConfig, siteConfig } from "@/config";
 import { url } from "@/utils/url-utils";
 
@@ -27,32 +25,14 @@ const techStack: {
 	label: string;
 	tone: string;
 	icon?: string;
-	image?: string;
-	href?: string;
 }[] = [
 	{ label: "Astro", tone: "violet", icon: "simple-icons:astro" },
 	{ label: "Tailwind CSS", tone: "cyan", icon: "simple-icons:tailwindcss" },
-	{
-		label: "Waline",
-		tone: "orange",
-		icon: "material-symbols:forum-outline-rounded",
-	},
-	{
-		label: "白山云",
-		tone: "blue",
-		image: baishanCloudIcon.src,
-		href: "https://home.console.baishan.com/#/dashboard",
-	},
-	{ label: "Umami", tone: "green", icon: "simple-icons:umami" },
 ];
 ---
 
 <div class="site-footer-stage" data-pagefind-ignore="all">
 	<section class="site-footer-kept-layers" aria-label="页脚装饰与技术栈">
-		<div class="site-footer-animals" aria-label="一排可爱的动物装饰">
-			<img src={animalsImage.src} alt="一排可爱的动物装饰" width="2170" height="305" loading="lazy" />
-		</div>
-
 		<div class="site-footer-stack" aria-label="本站使用的技术">
 			{techStack.map((item) => {
 				const Tag = item.href ? "a" : "span";

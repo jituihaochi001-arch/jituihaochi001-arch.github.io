@@ -1,38 +1,13 @@
 ---
 import { Icon } from "astro-icon/components";
-import { getImage } from "astro:assets";
-import type { ImageMetadata } from "astro";
 import ImageWrapper from "@/components/common/ImageWrapper.astro";
 import { profileConfig, siteConfig } from "@/config";
 import { url } from "@/utils/url-utils";
 
 const quickLinks = [
-	{ label: "文章", href: url("/archive/") },
-	{ label: "友链", href: url("/friends/") },
-	{ label: "朋友圈", href: url("/moments/") },
+	{ label: "作品", href: url("/archive/") },
+	{ label: "关于我", href: url("/about/") },
 	{ label: "留言板", href: url("/guestbook/") },
-	{ label: "关于", href: url("/about/") },
-];
-
-const cardOrnaments = [
-	{
-		key: "dove",
-		src: url("/images/home-stickers/golden-dove.png"),
-		initialStyle:
-			"left: 14.3103%; top: -62.2141%; right: auto; bottom: auto;",
-	},
-	{
-		key: "cloud",
-		src: url("/images/home-stickers/golden-cloud.png"),
-		initialStyle:
-			"left: 58.2759%; top: 5.8809%; right: auto; bottom: auto;",
-	},
-	{
-		key: "cloud-stream",
-		src: url("/images/home-stickers/golden-cloud-stream.png"),
-		initialStyle:
-			"left: -10.8621%; top: 65.6188%; right: auto; bottom: auto;",
-	},
 ];
 
 const socialLinks = [
@@ -44,190 +19,10 @@ const socialLinks = [
 		showName: false,
 	},
 ];
-
-const stickerImages = [
-	{
-		key: "quote",
-		src: url("/images/home-stickers/claudecode.webp"),
-	},
-	{
-		key: "anniversary-77",
-		src: url("/images/home-stickers/anniversary-77.webp"),
-		initialStyle: "inset: 23.4649% auto auto 29.8958%;",
-		nationalDayStyle: "inset: 23.4649% auto auto 29.8958%;",
-		mobileAnchor: "home-wallpaper-card",
-	},
-	{
-		key: "coder",
-		src: url("/monthly-2026-08/loading-girl.webp"),
-		initialStyle: "inset: 83.320066% auto auto 18.718750%;",
-		mobileStyle: "inset: auto auto 3% 29.5%;",
-	},
-	{
-		key: "blonde",
-		src: url("/images/home-stickers/blonde-idol.webp"),
-		initialStyle: "inset: 42.073794% auto auto 56.985938%;",
-		defaultStyle: "inset: 42.073794% auto auto 56.985938%;",
-		nationalDayStyle: "inset: 42.1053% auto auto 59.4271%;",
-		mobileStyle: "inset: auto auto 3% 55.5%;",
-	},
-	{
-		key: "dark",
-		src: url("/images/home-stickers/dark-haired-girl.webp"),
-		initialStyle: "inset: 36.321820% auto auto 36.997969%;",
-	},
-	{
-		key: "pink-bows",
-		src: url("/images/home-stickers/pink-bows.webp"),
-		initialStyle: "inset: 85.879934% auto auto 67.690625%;",
-	},
-	{
-		key: "aqua-singer",
-		src: url("/images/home-stickers/aqua-singer.webp"),
-		initialStyle: "inset: 85.100877% auto auto 60.510937%;",
-	},
-	{
-		key: "blue-witch",
-		src: url("/images/home-stickers/blue-witch.webp"),
-		initialStyle: "inset: 84.791667% auto auto 28.275156%;",
-		mobileStyle: "inset: auto auto 3% 4.5%;",
-	},
-	{
-		key: "white-haired-reader",
-		src: url("/images/home-stickers/white-haired-reader.webp"),
-		initialStyle: "inset: 85.243092% auto auto 34.902135%;",
-	},
-	{
-		key: "brown-lightning",
-		src: url("/images/home-stickers/brown-lightning.webp"),
-		initialStyle: "inset: 84.653289% auto auto 74.681250%;",
-		mobileStyle: "inset: auto auto 3% 80.5%;",
-	},
-	{
-		key: "pink-cat",
-		src: url("/images/home-stickers/pink-cat.webp"),
-		initialStyle: "inset: 86.495175% auto auto 81.020312%;",
-	},
-	{
-		key: "bamboo-girl",
-		src: url("/images/home-stickers/bamboo-girl.webp"),
-		initialStyle: "inset: 86.281360% auto auto 53.490625%;",
-	},
-	{
-		key: "pink-uniform",
-		src: url("/images/home-stickers/pink-uniform.webp"),
-		initialStyle: "inset: 86.343640% auto auto 41.756979%;",
-	},
-];
-
-// Keep the original assets, but ship a 360px rendition for these small stickers.
-// This remains sharp at 3x pixel density without downloading the full artwork.
-const stickerModules = import.meta.glob<ImageMetadata>(
-	[
-		"../../../public/images/home-stickers/*.webp",
-		"../../../public/monthly-2026-08/loading-girl.webp",
-	],
-	{ import: "default" },
-);
-const optimizedStickers = await Promise.all(stickerImages.map(async (sticker) => {
-	const sourcePath = `../../../public${sticker.src.replace(import.meta.env.BASE_URL, "/")}`;
-	const loadSource = stickerModules[sourcePath];
-	if (!loadSource) return { ...sticker, width: undefined, height: undefined };
-	const source = await loadSource();
-	const image = await getImage({
-		src: source,
-		width: Math.min(360, source.width),
-		format: "webp",
-		quality: 85,
-	});
-	return {
-		...sticker,
-		src: image.src,
-		width: image.attributes.width,
-		height: image.attributes.height,
-	};
-}));
-
-const quoteSticker = optimizedStickers.find((sticker) => sticker.key === "quote");
-const floatingStickerImages = optimizedStickers.filter(
-	(sticker) => sticker.key !== "quote",
-);
-const mobileStickerKeys = [
-	"coder",
-	"blonde",
-	"brown-lightning",
-	"blue-witch",
-	"anniversary-77",
-];
 ---
 
 <div class="home-wallpaper-decor" data-home-wallpaper-decor>
-	<div class="home-wallpaper-decor__stickers" aria-hidden="true">
-		{floatingStickerImages.map((sticker) => (
-			<div
-				class:list={[
-					"home-wallpaper-sticker",
-					`home-wallpaper-sticker--${sticker.key}`,
-				]}
-				style={sticker.initialStyle}
-				data-home-wallpaper-initial-style={sticker.initialStyle}
-				data-home-wallpaper-mobile-style={sticker.mobileStyle}
-				data-home-wallpaper-mobile-anchor={sticker.mobileAnchor}
-				data-home-wallpaper-default-style={sticker.defaultStyle}
-				data-home-wallpaper-national-day-style={sticker.nationalDayStyle}
-				data-home-wallpaper-mobile={mobileStickerKeys.includes(sticker.key) ? "true" : "false"}
-				data-home-wallpaper-sticker
-			>
-				<picture>
-					{!mobileStickerKeys.includes(sticker.key) && (
-						<source media="(max-width: 767px)" srcset="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" />
-					)}
-				<img
-					src={sticker.key === "anniversary-77" ? undefined : sticker.src}
-					data-national-day-src={
-						sticker.key === "anniversary-77" ? sticker.src : undefined
-					}
-					alt=""
-					width={sticker.width}
-					height={sticker.height}
-					style="width: 100% !important; height: auto !important; max-height: none !important; object-fit: contain !important;"
-					loading="eager"
-					fetchpriority="low"
-					decoding="async"
-					referrerpolicy="no-referrer"
-				/>
-				</picture>
-			</div>
-		))}
-
-		<div
-			class="home-wallpaper-sticker home-wallpaper-sticker--note home-wallpaper-sticker--fixed"
-			style="inset: 60.079825% auto auto 60.952083%;"
-		>
-			<span>欢迎访问</span>
-		</div>
-	</div>
-
 	<article class="home-wallpaper-card">
-		<div class="home-wallpaper-card__ornaments" aria-hidden="true">
-			{cardOrnaments.map((ornament) => (
-				<img
-					class:list={[
-						"home-wallpaper-card__ornament",
-						`home-wallpaper-card__ornament--${ornament.key}`,
-					]}
-					data-national-day-src={ornament.src}
-					data-home-wallpaper-sticker
-					alt=""
-					width="1254"
-					height="1254"
-					draggable="false"
-					loading="eager"
-					decoding="async"
-					style={`${ornament.initialStyle} width: var(--home-wallpaper-card-ornament-width) !important; height: auto !important; max-width: none !important; max-height: none !important; object-fit: contain !important; object-position: center !important; filter: none !important; opacity: 1 !important;`}
-				/>
-			))}
-		</div>
 		<div class="home-wallpaper-card__content">
 			<div class="home-wallpaper-card__avatar-wrap">
 				<ImageWrapper
@@ -237,35 +32,15 @@ const mobileStickerKeys = [
 					loading="eager"
 					fetchpriority="high"
 				/>
-				{quoteSticker && (
-					<img
-						class="home-wallpaper-card__avatar-sticker"
-						src={quoteSticker.src}
-						alt=""
-						aria-hidden="true"
-						draggable="false"
-						style="width: min(78px, 18vw) !important; height: auto !important; max-width: none !important; max-height: none !important; object-fit: contain !important; object-position: center !important; transform: translate(-7.030914px, -3.092804px);"
-						loading="eager"
-						decoding="async"
-						referrerpolicy="no-referrer"
-					/>
-				)}
+				
 			</div>
 
-			<p class="home-wallpaper-card__identity">
-				<span class="home-wallpaper-card__identity-mark" aria-hidden="true"></span>
-				<span class="home-wallpaper-card__motion-text">{profileConfig.name}</span>
-			</p>
 			<h1><span class="home-wallpaper-card__motion-text">{siteConfig.title}</span></h1>
-			<p class="home-wallpaper-card__celebration">
-				<span class="home-wallpaper-card__motion-text">盛世华诞 与你同庆</span>
-			</p>
+			
 			<p class="home-wallpaper-card__subtitle home-wallpaper-card__subtitle--default">
-				<span class="home-wallpaper-card__motion-text">{siteConfig.subtitle}</span>
+				<span class="home-wallpaper-card__motion-text">我思故我在</span>
 			</p>
-			<p class="home-wallpaper-card__subtitle home-wallpaper-card__subtitle--national-day">
-				<span class="home-wallpaper-card__motion-text">山河锦绣，万家灯火，愿以热爱守护这盛世中华</span>
-			</p>
+			
 			<nav class="home-wallpaper-card__nav" aria-label="首页快捷导航">
 				{quickLinks.map((link) => (
 					<a href={link.href}>

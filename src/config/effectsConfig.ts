@@ -1,10 +1,13 @@
-import type { SakuraConfig } from "../types/effectsConfig";
+import type {
+	FallingEffectConfig,
+	SakuraConfig,
+} from "../types/effectsConfig";
 
 // 特效配置 - 集中管理所有动画特效
 
 export const sakuraConfig: SakuraConfig = {
 	// 是否启用樱花特效
-	enable: true,
+	enable: false,
 
 	// 是否允许用户在设置中切换
 	switchable: true,
@@ -55,4 +58,44 @@ export const sakuraConfig: SakuraConfig = {
 
 	// 层级，确保樱花在合适的层级显示
 	zIndex: 100,
+};
+
+// 首页飘落效果：樱花 / 流星 / 雨滴 三种风格，默认流星。
+export const fallingEffectConfig: FallingEffectConfig = {
+	enable: true,
+	switchable: true,
+	defaultMode: "stars",
+	zIndex: 100,
+	stars: {
+		count: 44,
+		speed: {
+			min: 0.06,
+			max: 0.15,
+		},
+		size: {
+			min: 3,
+			max: 7,
+		},
+		opacity: {
+			min: 0.6,
+			max: 1,
+		},
+	},
+	rain: {
+		count: 280,
+		speed: {
+			min: 1.4,
+			max: 2.6,
+		},
+		length: {
+			min: 18,
+			max: 36,
+		},
+		opacity: {
+			min: 0.22,
+			max: 0.5,
+		},
+		// 负值表示从右上斜向左下
+		slant: -0.38,
+	},
 };

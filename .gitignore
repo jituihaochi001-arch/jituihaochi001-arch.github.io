@@ -70,3 +70,6 @@ waline/
 ops/
 .env.*
 !.env.example
+
+# Qoder Sites 部署描述文件（本地生成）
+*.qoder.site

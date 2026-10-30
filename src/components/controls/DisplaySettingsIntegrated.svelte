@@ -17,7 +17,7 @@ import {
 	getDefaultOverlayBlur,
 	getDefaultOverlayCardOpacity,
 	getDefaultOverlayOpacity,
-	getDefaultSakuraEnabled,
+	getDefaultFallingEffectMode,
 	getDefaultWavesEnabled,
 	getHue,
 	getNationalDayThemeEnabled,
@@ -29,7 +29,7 @@ import {
 	getStoredOverlayBlur,
 	getStoredOverlayCardOpacity,
 	getStoredOverlayOpacity,
-	getStoredSakuraEnabled,
+	getStoredFallingEffectMode,
 	getStoredSelectedWallpaperIndex,
 	getStoredWallpaperMode,
 	getStoredWavesEnabled,
@@ -42,7 +42,7 @@ import {
 	setOverlayBlur,
 	setOverlayCardOpacity,
 	setOverlayOpacity,
-	setSakuraEnabled,
+	setFallingEffectMode,
 	setSelectedWallpaperIndex,
 	setNationalDayThemeEnabled,
 	setWallpaperMode,
@@ -51,7 +51,7 @@ import {
 import { onMount } from "svelte";
 import Icon from "@/components/common/Icon.svelte";
 import FontSwitch from "@/components/controls/FontSwitch.svelte";
-import { backgroundWallpaper, sakuraConfig, siteConfig } from "@/config";
+import { backgroundWallpaper, fallingEffectConfig, siteConfig } from "@/config";
 import {
 	alternateHomepageWallpaper,
 	homepageWallpaper,
@@ -59,6 +59,7 @@ import {
 } from "@/config/backgroundWallpaper";
 import { homePortfolioIntroSettings } from "@/config/homePortfolioIntro";
 import type { WALLPAPER_MODE } from "@/types/config";
+import type { FallingEffectMode } from "@/types/effectsConfig";
 
 type OverlaySliderItem = {
 	key: "opacity" | "blur" | "cardOpacity";
@@ -185,8 +186,8 @@ const normalModeDefaultBannerCarouselEnabled =
 let defaultBannerCarouselEnabled = $derived(
 	nationalDayThemeEnabled ? false : normalModeDefaultBannerCarouselEnabled,
 );
-let sakuraEnabled = $state(true);
-const defaultSakuraEnabled = getDefaultSakuraEnabled();
+const defaultFallingEffectMode = getDefaultFallingEffectMode();
+let fallingEffectMode = $state<FallingEffectMode>(defaultFallingEffectMode);
 let selectedWallpaperIndex: number | null = $state(null);
 let overlayOpacity = $state(getDefaultOverlayOpacity());
 const defaultOverlayOpacity = getDefaultOverlayOpacity();
@@ -234,8 +235,14 @@ const isBannerTitleSwitchable =
 const isBannerCarouselSwitchable =
 	backgroundWallpaper.common?.carousel?.switchable ?? false;
 const isBuiltInWallpaperSwitchable = configuredWallpapers.desktop.length > 1;
-// 是否允许用户切换樱花特效
-const isSakuraSwitchable = sakuraConfig?.switchable ?? false;
+// 是否允许用户切换飘落特效
+const isFallingEffectSwitchable = fallingEffectConfig?.switchable ?? false;
+const fallingEffectOptions: { mode: FallingEffectMode; icon: string; labelKey: I18nKey }[] = [
+	{ mode: "none", icon: "mdi:close-circle-outline", labelKey: I18nKey.fallingEffectNone },
+	{ mode: "sakura", icon: "mdi:flower-poppy", labelKey: I18nKey.fallingEffectSakura },
+	{ mode: "stars", icon: "mdi:star-four-points-outline", labelKey: I18nKey.fallingEffectStars },
+	{ mode: "rain", icon: "mdi:weather-rainy", labelKey: I18nKey.fallingEffectRain },
+];
 // 是否有任何横幅设置可显示（后续添加新设置时在此处添加条件）
 const hasBannerSettings =
 	isBuiltInWallpaperSwitchable ||
@@ -500,9 +507,9 @@ function toggleBannerCarouselEnabled() {
 	setBannerCarouselEnabled(bannerCarouselEnabled);
 }
 
-function toggleSakuraEnabled() {
-	sakuraEnabled = !sakuraEnabled;
-	setSakuraEnabled(sakuraEnabled);
+function selectFallingEffect(mode: FallingEffectMode) {
+	fallingEffectMode = mode;
+	setFallingEffectMode(mode);
 }
 
 function getStoredIntroEnabled() {
@@ -807,8 +814,8 @@ onMount(() => {
 		? null
 		: getStoredSelectedWallpaperIndex();
 
-	// 从localStorage读取樱花特效状态
-	sakuraEnabled = getStoredSakuraEnabled();
+	// 从localStorage读取飘落特效状态
+	fallingEffectMode = getStoredFallingEffectMode();
 
 	// 从localStorage读取全屏透明设置状态
 	overlayOpacity = getStoredOverlayOpacity();
@@ -998,32 +1005,7 @@ $effect(() => {
                 {i18n(I18nKey.themeColor)}
             </div>
         {/if}
-        <button
-            type="button"
-            class="national-day-theme-toggle"
-            class:national-day-theme-toggle-active={nationalDayThemeEnabled}
-            role="switch"
-            aria-checked={nationalDayThemeEnabled}
-            aria-label="中国红-国庆专属主题"
-            onclick={toggleNationalDayTheme}
-        >
-            <span class="national-day-theme-toggle__copy">
-                <span class="national-day-theme-toggle__title">中国红-国庆专属</span>
-                <span class="national-day-theme-toggle__description">
-                    {nationalDayThemeEnabled
-                        ? "国庆配色、壁纸和贴纸已启用"
-                        : "常规配色与原版主页已恢复"}
-                </span>
-            </span>
-            <span class="national-day-theme-toggle__state">
-                {nationalDayThemeEnabled ? "开启" : "关闭"}
-                <span class="national-day-theme-toggle__track" aria-hidden="true">
-                    <span class="national-day-theme-toggle__thumb"></span>
-                </span>
-            </span>
-        </button>
-
-        {#if showThemeColor && !nationalDayThemeEnabled}
+        {#if showThemeColor}
             <div class="mt-3">
                 <div class="flex flex-row gap-2 mb-2 items-center justify-between">
                     <div class="flex gap-2 text-sm font-semibold text-neutral-800 dark:text-neutral-200 transition relative ml-3
@@ -1420,151 +1402,8 @@ $effect(() => {
         </div>
     {/if}
 
-    <!-- Home Intro Settings Section -->
-    <div
-        class="mt-2 mb-2 mobile-settings-section"
-        class:mobile-settings-section-hidden={mobileSettingsTab !== "preferences"}
-    >
-        <div class="flex items-center gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3 mb-2
-            before:w-1 before:h-4 before:rounded-md before:bg-(--primary)
-            before:absolute before:-left-3 before:top-1/2 before:-translate-y-1/2"
-        >
-            开屏动画
-            <span class="rounded-full bg-(--btn-regular-bg) px-2 py-0.5 text-[0.65rem] font-semibold leading-none text-(--primary)">
-                主页切换可预览
-            </span>
-            <button
-                type="button"
-                aria-label="恢复开屏动画默认设置"
-                class="btn-regular w-7 h-7 rounded-md active:scale-90"
-                class:opacity-0={introSettingsIsDefault}
-                class:pointer-events-none={introSettingsIsDefault}
-                onclick={resetIntroSettings}
-            >
-                <div class="text-(--btn-content)">
-                    <Icon icon="fa7-solid:arrow-rotate-left" class="text-[0.875rem]"></Icon>
-                </div>
-            </button>
-        </div>
-        <div class="space-y-2">
-            <button
-                type="button"
-                aria-pressed={introEnabled}
-                class="w-full btn-regular rounded-md py-2 px-3 flex items-center gap-3 text-left active:scale-95 touch-manipulation transition-all relative overflow-hidden"
-                class:bg-(--btn-regular-bg-hover)={introEnabled}
-                onclick={toggleIntroEnabled}
-            >
-                <Icon icon="material-symbols:play-arrow-rounded" class="text-[1.25rem] shrink-0"></Icon>
-                <span class="text-sm flex-1">进入首页时播放</span>
-                <div
-                    class="w-10 h-5 rounded-full transition-all duration-200 relative"
-                    class:bg-(--primary)={introEnabled}
-                    class:bg-(--btn-regular-bg-active)={!introEnabled}
-                >
-                    <div
-                        class="absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-all duration-200"
-                        class:left-0.5={!introEnabled}
-                        class:left-5={introEnabled}
-                    ></div>
-                </div>
-            </button>
-            <p class="-mt-1 mb-2 px-1 text-xs font-normal text-neutral-500 dark:text-neutral-400">
-                在主页切换角色或横幅，会立即播放一次动画预览
-            </p>
-            <div class="flex items-center gap-2 px-1 text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                <Icon icon="material-symbols:person-outline-rounded" class="text-[1rem] shrink-0"></Icon>
-                <span>选择开屏角色</span>
-            </div>
-            <div class="intro-character-picker grid grid-cols-3 gap-1.5" role="radiogroup" aria-label="选择开屏角色">
-                {#each homePortfolioIntroSettings.characters as character}
-                    <button
-                        type="button"
-                        title={character.label}
-                        aria-label={character.label}
-                        aria-pressed={selectedIntroCharacterId === character.id}
-                        class="intro-character-picker-item relative flex aspect-[4/5] flex-col overflow-hidden rounded-lg border-2 transition-all active:scale-95"
-                        class:border-(--primary)={selectedIntroCharacterId === character.id}
-                        class:border-transparent={selectedIntroCharacterId !== character.id}
-                        class:ring-2={selectedIntroCharacterId === character.id}
-                        class:ring-(--primary)={selectedIntroCharacterId === character.id}
-                        class:ring-offset-1={selectedIntroCharacterId === character.id}
-                        class:ring-offset-transparent={selectedIntroCharacterId === character.id}
-                        onclick={() => selectIntroCharacter(character.id)}
-                    >
-                        <img
-                            src={character.thumbnail}
-                            alt={character.label}
-                            class="min-h-0 w-full flex-1 object-contain"
-                            loading="lazy"
-                            decoding="async"
-                        />
-                        <span class="relative shrink-0 bg-black/55 px-1 py-1 text-center text-[0.65rem] font-semibold text-white">
-                            {character.label}
-                        </span>
-                    </button>
-                {/each}
-            </div>
-            <div class="intro-banner-selection">
-                <div class="mt-3 flex items-center gap-2 px-1 text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                    <Icon icon="material-symbols:image-outline" class="text-[1rem] shrink-0"></Icon>
-                    <span>上半幅横幅</span>
-                </div>
-                <div class="intro-banner-picker grid grid-cols-2 gap-1.5" role="radiogroup" aria-label="选择上半幅横幅">
-                    {#each homePortfolioIntroSettings.banners.desktop.top as banner}
-                        <button
-                            type="button"
-                            title={banner.label}
-                            aria-label={banner.label}
-                            aria-pressed={selectedIntroTopBannerId === banner.id}
-                            class="intro-banner-picker-item relative aspect-video cursor-pointer select-none touch-manipulation overflow-hidden rounded-lg border-2 transition-all active:scale-95"
-                            class:border-(--primary)={selectedIntroTopBannerId === banner.id}
-                            class:border-transparent={selectedIntroTopBannerId !== banner.id}
-                            class:ring-2={selectedIntroTopBannerId === banner.id}
-                            class:ring-(--primary)={selectedIntroTopBannerId === banner.id}
-                            class:ring-offset-1={selectedIntroTopBannerId === banner.id}
-                            class:ring-offset-transparent={selectedIntroTopBannerId === banner.id}
-                            onclick={() => selectIntroBanner("top", banner.id)}
-                        >
-                            <img src={banner.src} alt={banner.label} class="pointer-events-none absolute inset-0 h-full w-full object-cover" loading="lazy" decoding="async" />
-                            <span class="absolute inset-x-0 bottom-0 bg-black/55 px-1 py-1 text-center text-[0.6rem] font-semibold text-white">
-                                {banner.label}
-                            </span>
-                        </button>
-                    {/each}
-                </div>
-                <div class="mt-3 flex items-center gap-2 px-1 text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                    <Icon icon="material-symbols:image-outline" class="text-[1rem] shrink-0"></Icon>
-                    <span>下半幅横幅</span>
-                </div>
-                <div class="intro-banner-picker grid grid-cols-2 gap-1.5" role="radiogroup" aria-label="选择下半幅横幅">
-                    {#each homePortfolioIntroSettings.banners.desktop.bottom as banner}
-                        <button
-                            type="button"
-                            title={banner.label}
-                            aria-label={banner.label}
-                            aria-pressed={selectedIntroBottomBannerId === banner.id}
-                            class="intro-banner-picker-item relative aspect-video cursor-pointer select-none touch-manipulation overflow-hidden rounded-lg border-2 transition-all active:scale-95"
-                            class:border-(--primary)={selectedIntroBottomBannerId === banner.id}
-                            class:border-transparent={selectedIntroBottomBannerId !== banner.id}
-                            class:ring-2={selectedIntroBottomBannerId === banner.id}
-                            class:ring-(--primary)={selectedIntroBottomBannerId === banner.id}
-                            class:ring-offset-1={selectedIntroBottomBannerId === banner.id}
-                            class:ring-offset-transparent={selectedIntroBottomBannerId === banner.id}
-                            onclick={() => selectIntroBanner("bottom", banner.id)}
-                        >
-                            <img src={banner.src} alt={banner.label} class="pointer-events-none absolute inset-0 h-full w-full object-cover" loading="lazy" decoding="async" />
-                            <span class="absolute inset-x-0 bottom-0 bg-black/55 px-1 py-1 text-center text-[0.6rem] font-semibold text-white">
-                                {banner.label}
-                            </span>
-                        </button>
-                    {/each}
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Effects Settings Section -->
-    {#if isSakuraSwitchable}
+    {#if isFallingEffectSwitchable}
         <div
             class="mt-2 mb-2 mobile-settings-section"
             class:mobile-settings-section-hidden={mobileSettingsTab !== "preferences"}
@@ -1575,30 +1414,30 @@ $effect(() => {
             >
                 {i18n(I18nKey.effectsSettings)}
                 <button aria-label="Reset to Default" class="btn-regular w-7 h-7 rounded-md  active:scale-90"
-                        class:opacity-0={sakuraEnabled === defaultSakuraEnabled} class:pointer-events-none={sakuraEnabled === defaultSakuraEnabled} onclick={() => { sakuraEnabled = defaultSakuraEnabled; setSakuraEnabled(defaultSakuraEnabled); }}>
+                        class:opacity-0={fallingEffectMode === defaultFallingEffectMode} class:pointer-events-none={fallingEffectMode === defaultFallingEffectMode} onclick={() => selectFallingEffect(defaultFallingEffectMode)}>
                     <div class="text-(--btn-content)">
                         <Icon icon="fa7-solid:arrow-rotate-left" class="text-[0.875rem]"></Icon>
                     </div>
                 </button>
             </div>
             <div class="space-y-1">
-                <button
-                    type="button"
-                    aria-pressed={sakuraEnabled}
-                    class="w-full btn-regular rounded-md py-2 px-3 flex items-center gap-3 text-left active:scale-95 touch-manipulation transition-all relative overflow-hidden"
-                    class:bg-(--btn-regular-bg-hover)={sakuraEnabled}
-                    onclick={toggleSakuraEnabled}
-                >
-                    <Icon icon="mdi:flower-poppy" class="text-[1.25rem] shrink-0"></Icon>
-                    <span class="text-sm flex-1">{i18n(I18nKey.sakuraEffect)}</span>
-                    <div class="w-10 h-5 rounded-full transition-all duration-200 relative"
-                         class:bg-(--primary)={sakuraEnabled}
-                         class:bg-(--btn-regular-bg-active)={!sakuraEnabled}>
-                        <div class="absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-all duration-200"
-                             class:left-0.5={!sakuraEnabled}
-                             class:left-5={sakuraEnabled}></div>
-                    </div>
-                </button>
+                {#each fallingEffectOptions as option}
+                    <button
+                        type="button"
+                        aria-pressed={fallingEffectMode === option.mode}
+                        class="w-full btn-regular rounded-md py-2 px-3 flex items-center gap-3 text-left active:scale-95 touch-manipulation transition-all relative overflow-hidden"
+                        class:bg-(--btn-regular-bg-hover)={fallingEffectMode === option.mode}
+                        onclick={() => selectFallingEffect(option.mode)}
+                    >
+                        <Icon icon={option.icon} class="text-[1.25rem] shrink-0"></Icon>
+                        <span class="text-sm flex-1">{i18n(option.labelKey)}</span>
+                        <span class="flex h-5 w-5 items-center justify-center" aria-hidden="true">
+                            {#if fallingEffectMode === option.mode}
+                                <Icon icon="material-symbols:check-rounded" class="text-[1.15rem] text-(--primary)"></Icon>
+                            {/if}
+                        </span>
+                    </button>
+                {/each}
             </div>
         </div>
     {/if}

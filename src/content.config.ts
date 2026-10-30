@@ -13,6 +13,7 @@ type PostData = {
 	aiPolished: boolean;
 	image: string;
 	imageColor: string;
+	video: string;
 	tags: string[];
 	category: string | null;
 	lang: string;
@@ -46,6 +47,7 @@ const postsCollection: PostsCollection = defineCollection({
 		aiPolished: z.boolean().optional().default(true),
 		image: z.string().optional().default(""),
 		imageColor: z.string().optional().default(""),
+		video: z.string().optional().default(""),
 		tags: z.array(z.string()).optional().default([]),
 		category: z.string().optional().nullable().default(""),
 		lang: z.string().optional().default(""),

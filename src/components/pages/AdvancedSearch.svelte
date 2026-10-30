@@ -65,7 +65,7 @@ const date = (v?: number) =>
 		: "";
 const posts = async () => {
 	if (cache) return cache;
-	const r = await fetch(formatUrl("/api/allPostMeta.json"));
+	const r = await fetch(formatUrl("/data/allPostMeta.json"));
 	cache = r.ok ? await r.json() : [];
 	return cache as Post[];
 };

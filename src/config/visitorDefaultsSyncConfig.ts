@@ -31,7 +31,7 @@ export const visitorDefaultsSyncConfig: VisitorDefaultsSyncConfig = {
 		"bannerCarouselEnabled",
 		"bannerCarouselEnabledByTheme.normal",
 		"bannerCarouselEnabledByTheme.national-day",
-		"sakuraEnabled",
+		"fallingEffectMode",
 		"postListLayout",
 		homePortfolioIntroSettings.enabledStorageKey,
 		homePortfolioIntroSettings.characterStorageKey,

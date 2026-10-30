@@ -55,11 +55,19 @@ const adapter = process.env.CF_WORKERS
 		})
 	: undefined;
 
+// 部署路径由 CI 注入：GitHub Pages 项目站为 /<仓库名>，用户站与自定义域名为 /
+const basePath = process.env.BASE_PATH || "/";
+
+// 配置文件先于 Vite 加载，这里直接读 process.env，页面侧读 import.meta.env.PUBLIC_SITE_URL
+const siteUrl = (
+	process.env.PUBLIC_SITE_URL || siteConfig.site_url
+).replace(/\/+$/, "");
+
 // https://astro.build/config
 export default defineConfig({
-	site: siteConfig.site_url,
+	site: siteUrl,
 
-	base: "/",
+	base: basePath,
 	trailingSlash: "always",
 
 	// 字体配置 - 只加载实际使用的字体，跳过未引用的以加快构建

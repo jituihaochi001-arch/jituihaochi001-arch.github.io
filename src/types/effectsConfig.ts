@@ -25,3 +25,43 @@ export type SakuraConfig = {
 	};
 	zIndex: number; // 层级，确保樱花在合适的层级显示
 };
+
+export type FallingEffectMode = "none" | "sakura" | "stars" | "rain";
+
+export type FallingEffectConfig = {
+	enable: boolean; // 是否提供飘落效果
+	switchable?: boolean; // 是否允许用户在设置中切换飘落效果
+	defaultMode: FallingEffectMode; // 首次访问时使用的飘落效果
+	zIndex: number; // 画布层级
+	stars: {
+		count: number; // 星星数量
+		speed: {
+			min: number; // 下落速度最小值（像素/毫秒）
+			max: number; // 下落速度最大值
+		};
+		size: {
+			min: number; // 星星尺寸最小值（像素）
+			max: number; // 星星尺寸最大值
+		};
+		opacity: {
+			min: number; // 最小不透明度
+			max: number; // 最大不透明度
+		};
+	};
+	rain: {
+		count: number; // 雨滴数量
+		speed: {
+			min: number; // 下落速度最小值（像素/毫秒）
+			max: number; // 下落速度最大值
+		};
+		length: {
+			min: number; // 雨滴长度最小值（像素）
+			max: number; // 雨滴长度最大值
+		};
+		opacity: {
+			min: number; // 最小不透明度
+			max: number; // 最大不透明度
+		};
+		slant: number; // 雨丝倾斜程度，0 为垂直下落
+	};
+};

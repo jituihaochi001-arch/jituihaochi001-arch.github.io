@@ -14,94 +14,18 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 	const links: NavBarLink[] = [
 		// 主页
 		LinkPresets.Home,
+		// 作品集：文章归档
+		{
+			name: "作品",
+			url: "/archive/",
+			icon: "material-symbols:grid-view-rounded",
+			activePaths: ["/posts/", "/archive/"],
+		},
+		// 关于：经历、技能与联系方式
+		LinkPresets.About,
+		// 留言板
+		LinkPresets.Guestbook,
 	];
-
-	// 文章及其子菜单
-	links.push({
-		name: "文章",
-		url: "#",
-		icon: "material-symbols:article",
-		activePaths: ["/posts/"],
-		children: [
-			// 归档
-			LinkPresets.Archive,
-
-			// 分类
-			LinkPresets.Categories,
-
-			// 标签
-			LinkPresets.Tags,
-		],
-	});
-
-	// 站点统计
-	links.push(LinkPresets.Analytics);
-
-	// 友链
-	links.push(LinkPresets.Friends);
-
-	// 朋友圈
-	links.push(LinkPresets.Moments);
-
-	// 留言板
-	links.push(LinkPresets.Guestbook);
-
-	// 我的及其子菜单
-	links.push({
-		name: "我的",
-		url: "#",
-		icon: "material-symbols:person",
-		children: [
-			// 相册
-			LinkPresets.Gallery,
-
-			// 账单
-			LinkPresets.Bills,
-
-			// 追番
-			LinkPresets.Anime,
-
-			// 番组计划
-			LinkPresets.Bangumi,
-
-			// 工具
-			LinkPresets.Tools,
-		],
-	});
-
-	// 关于及其子菜单
-	links.push({
-		name: "关于",
-		url: "#",
-		icon: "material-symbols:info",
-		children: [
-			// 打赏
-			LinkPresets.Sponsor,
-
-			// 关于页面
-			LinkPresets.About,
-
-			// 动态表情
-			LinkPresets.Lottie,
-
-			// 项目更新日志
-			LinkPresets.Changelog,
-
-			// 博客更新日志
-			LinkPresets.BlogChangelog,
-		],
-	});
-
-	// 开往：独立博客友链接力，放在“关于”右侧
-	links.push(LinkPresets.Travellings);
-
-	// 文档链接
-	// links.push({
-	// 	name: "文档",
-	// 	url: "https://example.com/docs",
-	// 	external: true,
-	// 	icon: "material-symbols:docs",
-	// });
 
 	return { links } as NavBarConfig;
 };
