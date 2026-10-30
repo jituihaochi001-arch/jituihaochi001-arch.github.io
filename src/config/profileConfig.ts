@@ -3,7 +3,7 @@ import type { ProfileConfig } from "../types/profileConfig";
 export const profileConfig: ProfileConfig = {
 	avatar: "/assets/images/jitui/avatar.jpg",
 	name: "鸡腿好吃",
-	bio: "机器人工程在读，课外都在写游戏。Unity / Godot 双开，喜欢把系统拆小再拼起来。",
+	bio: "独立游戏开发者，爱好vibecoding小游戏~",
 	links: [
 		{
 			name: "GitHub",

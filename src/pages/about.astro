@@ -101,10 +101,6 @@ const handle = "@jituihaochi001-arch";
 					<h1 id="about-title">{siteConfig.title}</h1>
 					<p class="profile-handle">{handle}</p>
 					<p class="profile-lead">{profileConfig.bio}</p>
-					<div class="profile-status" aria-label="当前状态">
-						<span class="profile-status__dot"></span>
-						<span>中国矿业大学 · 机器人工程 · 2023—2027</span>
-					</div>
 				</div>
 			</div>
 
@@ -395,8 +391,7 @@ const handle = "@jituihaochi001-arch";
 		text-transform: uppercase;
 	}
 
-	.profile-kicker__dot,
-	.profile-status__dot {
+	.profile-kicker__dot {
 		width: 0.48rem;
 		height: 0.48rem;
 		flex: 0 0 auto;
@@ -430,21 +425,6 @@ const handle = "@jituihaochi001-arch";
 		color: var(--text-color);
 		font-size: 0.97rem;
 		line-height: 1.7;
-	}
-
-	.profile-status {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.48rem;
-		margin-top: 0.75rem;
-		color: var(--content-meta);
-		font-size: 0.76rem;
-	}
-
-	.profile-status__dot {
-		width: 0.38rem;
-		height: 0.38rem;
-		box-shadow: none;
 	}
 
 	.profile-actions {
@@ -1549,11 +1529,6 @@ const handle = "@jituihaochi001-arch";
 			margin-top: 0.6rem;
 			font-size: 0.84rem;
 			line-height: 1.65;
-		}
-
-		.profile-status {
-			margin-top: 0.6rem;
-			font-size: 0.68rem;
 		}
 
 		.profile-actions {
