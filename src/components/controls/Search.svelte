@@ -53,7 +53,7 @@ const highlightKeyword = (value: string, keyword: string): string => {
 const loadLocalSearchPosts = async (): Promise<LocalSearchPost[]> => {
 	if (localSearchCache) return localSearchCache;
 
-	const response = await fetch(formatUrl("/api/allPostMeta.json"));
+	const response = await fetch(formatUrl("/data/allPostMeta.json"));
 	if (!response.ok) {
 		localSearchCache = [];
 		return localSearchCache;

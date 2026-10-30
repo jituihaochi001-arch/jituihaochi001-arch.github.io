@@ -15,6 +15,13 @@ export type BackgroundImages = {
 	isMultiple: boolean;
 };
 
+// 配置里的壁纸是根路径写法，部署到子路径（如 GitHub Pages 项目站）时需要补上 base
+const withBase = (src: string): string => {
+	if (!src.startsWith("/") || src.startsWith("//")) return src;
+	const base = import.meta.env?.BASE_URL || "/";
+	return `${base.replace(/\/$/, "")}${src}`;
+};
+
 export const getBackgroundImages = (): BackgroundImages => {
 	const bgSrc = backgroundWallpaper.src;
 
@@ -28,8 +35,8 @@ export const getBackgroundImages = (): BackgroundImages => {
 			desktop?: string | string[];
 			mobile?: string | string[];
 		};
-		const desktopImages = toArray(srcObj.desktop);
-		const mobileImages = toArray(srcObj.mobile);
+		const desktopImages = toArray(srcObj.desktop).map(withBase);
+		const mobileImages = toArray(srcObj.mobile).map(withBase);
 		return {
 			desktop: desktopImages.length > 0 ? desktopImages : mobileImages,
 			mobile: mobileImages.length > 0 ? mobileImages : desktopImages,
@@ -37,7 +44,7 @@ export const getBackgroundImages = (): BackgroundImages => {
 		};
 	}
 	// 如果是字符串或数组，同时用于桌面端和移动端
-	const images = toArray(bgSrc as string | string[]);
+	const images = toArray(bgSrc as string | string[]).map(withBase);
 	return {
 		desktop: images,
 		mobile: images,

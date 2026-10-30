@@ -189,7 +189,7 @@ const { class: className, style } = Astro.props;
 		flex: none;
 		background-image: var(
 			--time-greeting-image,
-			url("/assets/images/wallpaper/thumbs/wallpaper-18.webp")
+			url("/assets/images/jitui/wallpapers/wallpaper-01.jpg")
 		);
 		background-position: center;
 		background-size: cover;
@@ -260,20 +260,20 @@ const { class: className, style } = Astro.props;
 		"SATURDAY",
 	];
 
-	const wutheringWavesImages = [
-		"01",
-		...Array.from({ length: 23 }, (_, index) =>
-			String(index + 25).padStart(2, "0"),
-		),
-	].map(
-		(index) =>
-			`/assets/images/wallpaper/thumbs/wallpaper-${index}.webp`,
-	);
+	const greetingImages = [
+		"/assets/images/jitui/wallpapers/wallpaper-01.jpg",
+		"/assets/images/jitui/wallpapers/wallpaper-02.jpg",
+		"/assets/images/jitui/wallpapers/wallpaper-03.jpg",
+		"/assets/images/jitui/wallpapers/wallpaper-04.jpg",
+		"/assets/images/jitui/wallpapers/wallpaper-05.jpg",
+		"/assets/images/jitui/wallpapers/wallpaper-06.jpg",
+		"/assets/images/jitui/wallpapers/wallpaper-07.jpg",
+		"/assets/images/jitui/wallpapers/wallpaper-08.jpg",
+		"/assets/images/jitui/wallpapers/wallpaper-09.jpg",
+	];
 
-	function getRandomWutheringWavesImage(): string {
-		return wutheringWavesImages[
-			Math.floor(Math.random() * wutheringWavesImages.length)
-		];
+	function getRandomGreetingImage(): string {
+		return greetingImages[Math.floor(Math.random() * greetingImages.length)];
 	}
 
 	function getGreetingPeriod(hour: number): GreetingPeriod {
@@ -327,13 +327,11 @@ const { class: className, style } = Astro.props;
 			if (this.imageInitialized) return;
 			this.imageInitialized = true;
 
-			const imageUrl = getRandomWutheringWavesImage();
+			const imageUrl = getRandomGreetingImage();
 			const image = new Image();
 			image.onload = () => this.setLandscapeImage(imageUrl);
 			image.onerror = () =>
-				this.setLandscapeImage(
-					"/assets/images/wallpaper/thumbs/wallpaper-01.webp",
-				);
+				this.setLandscapeImage("/assets/images/jitui/wallpapers/wallpaper-01.jpg");
 			image.src = imageUrl;
 		}
 

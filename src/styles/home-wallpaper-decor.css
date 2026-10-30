@@ -406,7 +406,7 @@ html.is-page-transitioning #wallpaper-wrapper.homepage-fullscreen-decor {
 
 .home-wallpaper-card h1 {
 	display: inline-block;
-	margin: 0;
+	margin: 0.85rem 0 0;
 	font-family: var(--font-lxgw-wenkai, inherit);
 	font-size: clamp(2.1rem, 4vw, 2.9rem);
 	font-weight: 800;

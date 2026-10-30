@@ -14,13 +14,13 @@ export const musicPlayerConfig: MusicPlayerConfig = {
 	mode: "local",
 
 	// 默认音量 (0-1)
-	volume: 0.7,
+	volume: 0.45,
 
 	// 播放模式：'list'=列表循环, 'one'=单曲循环, 'random'=随机播放
 	playMode: "list",
 
 	// 是否显启用歌词
-	showLyrics: true,
+	showLyrics: false,
 
 	// Meting API 配置
 	meting: {
@@ -48,6 +48,13 @@ export const musicPlayerConfig: MusicPlayerConfig = {
 	// 2. 或者直接填入歌词字符串内容
 	// lrc: "[00:00.00]歌词内容...",
 	local: {
-		playlist: [],
+		playlist: [
+			{
+				name: "轻声细语",
+				artist: "鸡腿好吃的歌单",
+				url: "/assets/music/qingshengxiyu.mp3",
+				cover: "/assets/images/jitui/avatar.jpg",
+			},
+		],
 	},
 };

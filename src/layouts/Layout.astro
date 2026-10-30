@@ -10,7 +10,7 @@ import FancyboxManager from "@components/features/FancyboxManager.astro";
 import FontSetup from "@components/features/FontSetup.astro";
 import MusicManager from "@components/features/MusicManager.astro";
 import RecommendedStarFlowManager from "@components/features/RecommendedStarFlowManager.astro";
-import SakuraEffect from "@components/features/SakuraEffect.astro";
+import FallingEffect from "@components/features/FallingEffect.astro";
 import VisitorDefaultsSync from "@components/features/VisitorDefaultsSync.astro";
 import WallpaperBootstrap from "@components/features/WallpaperBootstrap.astro";
 import WalineManager from "@components/features/WalineManager.astro";
@@ -127,6 +127,34 @@ const canonicalUrl = new URL(
 <html lang={siteLang} class="bg-(--page-bg) text-[14px] md:text-[16px]" data-wallpaper-mode={backgroundWallpaper.mode} data-card-decoration="flat" data-national-day-theme={String(nationalDayTheme.defaultEnabled)}>
   <head>
     <meta charset="UTF-8" />
+    <script is:inline>
+      // 托管层会把目录路径（/about/）统一回落到首页，这里统一补成 index.html，
+      // 保证直接访问、刷新和分享链接都能拿到对应的静态页面。
+      (() => {
+        const normalize = (path) =>
+          path.length > 1 && path.endsWith("/") ? `${path}index.html` : path;
+        const current = location.pathname;
+        const next = normalize(current);
+        if (next !== current) {
+          location.replace(`${next}${location.search}${location.hash}`);
+          return;
+        }
+        window.addEventListener(
+          "click",
+          (event) => {
+            if (event.defaultPrevented || event.button !== 0) return;
+            const anchor = event.target instanceof Element ? event.target.closest("a[href]") : null;
+            if (!anchor) return;
+            const url = new URL(anchor.href, location.href);
+            if (url.origin !== location.origin) return;
+            const normalized = normalize(url.pathname);
+            if (normalized === url.pathname) return;
+            anchor.setAttribute("href", `${normalized}${url.search}${url.hash}`);
+          },
+          true,
+        );
+      })();
+    </script>
     <VisitorDefaultsSync />
     <ThemeBootstrap
       pureStylesheets={pureStylesheets}
@@ -362,11 +390,10 @@ const canonicalUrl = new URL(
       );
 
       // Restore the site-wide seasonal theme preference before first paint.
+      // 本站不使用国庆壁纸，忽略旧偏好，否则会把壁纸锁成单张。
       const storedNationalDayTheme = localStorage.getItem("nationalDayThemeEnabled");
       const legacyColorPreset = localStorage.getItem("themeColorPreset");
-      const nationalDayThemeEnabled = storedNationalDayTheme === null
-        ? nationalDayThemeDefaultEnabled
-        : storedNationalDayTheme === "true";
+      const nationalDayThemeEnabled = nationalDayThemeDefaultEnabled;
       let hue = localStorage.getItem("hue") || configHue;
       if (
         storedNationalDayTheme === null &&
@@ -666,8 +693,8 @@ const canonicalUrl = new URL(
 
 
 
-    <!-- Sakura Effect -->
-    <SakuraEffect />
+    <!-- Falling Effect -->
+    <FallingEffect />
 
     <!-- Welcome Toast -->
     <WelcomeToast />
@@ -844,6 +871,10 @@ const canonicalUrl = new URL(
     }
   }
 </style>
+
+<script>
+	void import("@/scripts/click-particles");
+</script>
 
 <script>
 	if (document.documentElement.dataset.siteTheme === "pure") {

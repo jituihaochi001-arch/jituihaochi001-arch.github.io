@@ -1,43 +1,20 @@
-import type { BackgroundWallpaperConfig } from "@/types/backgroundWallpaper";
-
-export const homepageWallpaper = "/assets/images/wallpaper/homepage-anniversary-fireworks-20260930.webp";
-export const alternateHomepageWallpaper = "/assets/images/wallpaper/homepage-anniversary-blossoms.webp";
-export const mobileHomepageWallpaper = "/assets/images/wallpaper/homepage-anniversary-mobile-20260930.webp";
-const originalWallpaperImages = Array.from(
-	{ length: 24 },
-	(_, index) =>
-		`/assets/images/wallpaper/wallpaper-${String(index + 1).padStart(2, "0")}.webp`,
-);
-
-const importedWutheringWavesImages = Array.from(
-	{ length: 23 },
-	(_, index) =>
-		`/assets/images/wallpaper/wallpaper-${String(index + 25).padStart(2, "0")}.webp`,
-);
-
-const wutheringWavesWallpaperImages = [
-	originalWallpaperImages[0],
-	...importedWutheringWavesImages,
+// 这三个常量标记国庆壁纸，本站在普通模式下使用全部九张壁纸，因此不配置国庆壁纸。
+export const homepageWallpaper = "";
+export const alternateHomepageWallpaper = "";
+export const mobileHomepageWallpaper = "";
+const wallpaperImages = [
+	"/assets/images/jitui/wallpapers/wallpaper-01.jpg",
+	"/assets/images/jitui/wallpapers/wallpaper-02.jpg",
+	"/assets/images/jitui/wallpapers/wallpaper-03.jpg",
+	"/assets/images/jitui/wallpapers/wallpaper-04.jpg",
+	"/assets/images/jitui/wallpapers/wallpaper-05.jpg",
+	"/assets/images/jitui/wallpapers/wallpaper-06.jpg",
+	"/assets/images/jitui/wallpapers/wallpaper-07.jpg",
+	"/assets/images/jitui/wallpapers/wallpaper-08.jpg",
+	"/assets/images/jitui/wallpapers/wallpaper-09.jpg",
 ];
-const otherWallpaperImages = originalWallpaperImages.slice(1);
-const desktopWallpaperImages = [
-	homepageWallpaper,
-	alternateHomepageWallpaper,
-	...wutheringWavesWallpaperImages,
-	...otherWallpaperImages,
-];
-
-const mobileOnlyWutheringWavesImages = Array.from(
-	{ length: 3 },
-	(_, index) =>
-		`/assets/images/wallpaper/wallpaper-mobile-${String(index + 1).padStart(2, "0")}.webp`,
-);
-const mobileWallpaperImages = [
- mobileHomepageWallpaper,
- ...mobileOnlyWutheringWavesImages,
-	...wutheringWavesWallpaperImages,
-	...otherWallpaperImages,
-];
+const desktopWallpaperImages = wallpaperImages;
+const mobileWallpaperImages = wallpaperImages;
 
 export const backgroundWallpaper: BackgroundWallpaperConfig = {
 	// 壁纸模式："banner" 横幅壁纸，"fullscreen" 全屏壁纸，"overlay" 全屏透明，"none" 纯色背景无壁纸
@@ -47,7 +24,7 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 	// 推荐只选择自己喜欢的模式并关闭切换功能
 	switchable: true,
 	// 是否启用背景视频播放，配置后将在导航栏显示视频播放按钮
-	playerEnable: true,
+	playerEnable: false,
 	/**
 	 * 背景图片配置
 	 * 图片路径支持三种格式：
@@ -87,7 +64,7 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 		// 支持单个视频路径（字符串）或多个视频循环（数组）
 		// 支持远程视频URL，本地视频请放在 public/assets/videos/ 目录下
 		// playerUrl: "/assets/videos/firefly.mp4",
-		playerUrl: "/assets/videos/mingchao-home-edit.mp4",
+		// playerUrl: "/assets/videos/mingchao-home-edit.mp4",
 	},
 	// 横幅壁纸和全屏壁纸共享配置
 	common: {
@@ -98,7 +75,7 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 		// 主页横幅文字
 		homeText: {
 			// 是否启用主页横幅文字
-			enable: true,
+			enable: false,
 			// 是否允许用户通过控制面板切换横幅标题显示
 			switchable: true,
 			// 主页横幅主标题
@@ -167,9 +144,9 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 			// 普通模式默认自动轮播；国庆模式由主题状态覆盖为关闭
 			enable: true,
 			// 轮播切换间隔（毫秒）
-			interval: 5000,
+			interval: 10000,
 			// 过渡效果: 'fade' 渐变 | 'zoom' 缩放 | 'slide' 滑动 | 'kenburns' 旋转木马
-			transitionEffect: "zoom",
+			transitionEffect: "fade",
 			// 允许用户通过控制面板切换壁纸轮播
 			switchable: true,
 		},

@@ -4,37 +4,41 @@ import type { SiteConfig } from "@/types/siteConfig";
 // 语言代码，例如：'zh_CN', 'zh_TW', 'en', 'ja', 'ru'。
 const SITE_LANG = "zh_CN";
 
+// GitHub Pages 等部署环境用它覆盖线上域名，本地与 Qoder Sites 构建不受影响
+const envSiteUrl = import.meta.env?.PUBLIC_SITE_URL?.replace(/\/+$/, "");
+
 export const siteConfig: SiteConfig = {
 	// 站点标题
-	title: "Aemeath",
+	title: "鸡腿好吃",
 
 	// 站点副标题
-	subtitle: "请填写自己的站点副标题",
+	subtitle: "独立游戏开发 · 系统策划",
 
 	// Aemeath 主题版本
 	themeVersion: "V4.3.0",
 
 	// 站点 URL
-	site_url: "https://example.com",
+	site_url: envSiteUrl || "https://tasty-chicken-tbw90iaqa7y.qoder.zone",
 
 	// 站点描述
 	description:
-		"基于 Astro 与 Svelte 的个人博客，请填写自己的站点介绍。",
+		"鸡腿好吃（崔伟娜）的个人站：Unity / Godot 独立游戏开发、系统策划，以及做过的三个小项目和一路写下来的时间线。",
 
 	// 站点关键词
 	keywords: [
-		"Aemeath",
-		"Astro",
-		"ACGN",
-		"博客",
-		"技术博客",
-		"静态博客",
+		"鸡腿好吃",
+		"独立游戏",
+		"系统策划",
+		"Unity",
+		"Godot",
+		"游戏开发",
+		"个人主页",
 	],
 
 	// 主题色
 	themeColor: {
 		// 主题色的默认色相，范围从 0 到 360。例如：红色：0，青色：200，蓝绿色：250，粉色：345
-		hue: 250,
+		hue: 205,
 		// 是否对访问者隐藏主题色选择器
 		fixed: false,
 		// 默认模式："light" 亮色，"dark" 暗色，"system" 跟随系统
@@ -57,19 +61,19 @@ export const siteConfig: SiteConfig = {
 	// Favicon 配置
 	favicon: [
 		{
-			src: "/favicon/xiaoai-avatar-512.png?v=20261028",
+			src: "/favicon/jitui-avatar-512.png",
 			sizes: "512x512",
 		},
 		{
-			src: "/favicon/xiaoai-avatar-192.png?v=20261028",
+			src: "/favicon/jitui-avatar-192.png",
 			sizes: "192x192",
 		},
 		{
-			src: "/favicon/xiaoai-avatar-180.png?v=20261028",
+			src: "/favicon/jitui-avatar-180.png",
 			sizes: "180x180",
 		},
 		{
-			src: "/favicon/xiaoai-avatar-32.png?v=20261028",
+			src: "/favicon/jitui-avatar-32.png",
 			sizes: "32x32",
 		},
 	],
@@ -84,11 +88,11 @@ export const siteConfig: SiteConfig = {
 		// 4. 网络图片: { type: "url", value: "https://example.com/logo.png", alt: "Logo" }
 		logo: {
 			type: "image",
-			value: "/assets/ai-xiaoai-avatar.png?v=20261028",
-			alt: "Aemeath",
+			value: "/assets/images/jitui/avatar.jpg",
+			alt: "鸡腿好吃",
 		},
 		// 导航栏标题
-		title: "Aemeath",
+		title: "鸡腿好吃",
 		// 全宽导航栏，导航栏是否占满屏幕宽度
 		widthFull: false,
 		// 导航菜单对齐方式，left：左对齐，center：居中
@@ -100,7 +104,7 @@ export const siteConfig: SiteConfig = {
 	},
 
 	// 站点开始日期，用于统计运行天数
-	siteStartDate: "2026-01-01",
+	siteStartDate: "2026-10-26",
 
 	// 站点时区（IANA 时区字符串），用于格式化bangumi、rss里的构建日期时间等等..
 	// 示例："Asia/Shanghai", "UTC", 如果为空，则按照构建服务器的时区进行时区转换
@@ -109,17 +113,17 @@ export const siteConfig: SiteConfig = {
 	// 页面开关配置 - 控制特定页面的访问权限，设为false会返回404并自动隐藏对应的导航栏菜单项
 	pages: {
 		// 友链页面开关
-		friends: true,
+		friends: false,
 		// 打赏页面开关
-		sponsor: true,
+		sponsor: false,
 		// 留言板页面开关，需要配置评论系统
 		guestbook: true,
 		// 番组计划页面开关，含追番、游戏、书籍和音乐
-		bangumi: true,
+		bangumi: false,
 		// 相册页面开关
-		gallery: true,
+		gallery: false,
 		// 追番页面开关
-		anime: true,
+		anime: false,
 	},
 
 	// 分类导航栏开关，在首页和归档页顶部显示分类快捷导航

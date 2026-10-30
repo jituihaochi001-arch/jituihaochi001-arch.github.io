@@ -349,11 +349,31 @@ if (entry.id.startsWith("monthly-")) {
         }
       </div>
 
+      {
+        entry.data.video && (
+          <div class="mb-6 onload-animation">
+            <video
+              class="w-full rounded-xl border border-(--line-divider) bg-black"
+              src={url(entry.data.video)}
+              poster={entry.data.image || undefined}
+              autoplay
+              muted
+              loop
+              playsinline
+              controls
+              preload="metadata"
+              aria-label={`${entry.data.title} 演示视频`}
+            ></video>
+          </div>
+        )
+      }
+
       <!-- Article covers can differ from the images used on post cards. -->
 
       {
         articleCoverImage &&
         coverImageConfig.enableInPost &&
+        !entry.data.video &&
         (
           <div style="margin-top:1rem;">
             <CoverImage
