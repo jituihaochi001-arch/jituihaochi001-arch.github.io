@@ -1,3 +1,5 @@
+import type { BackgroundWallpaperConfig } from "../types/backgroundWallpaper";
+
 // 这三个常量标记国庆壁纸，本站在普通模式下使用全部九张壁纸，因此不配置国庆壁纸。
 export const homepageWallpaper = "";
 export const alternateHomepageWallpaper = "";
