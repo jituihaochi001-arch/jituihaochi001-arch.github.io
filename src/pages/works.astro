@@ -1,0 +1,38 @@
+---
+import type { Page } from "astro";
+import type { CollectionEntry } from "astro:content";
+import CategoryBar from "@/components/layout/CategoryBar.astro";
+import PostPage from "@/components/layout/PostPage.astro";
+import PureBlog from "@/components/themes/pure/PureBlog.astro";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { getSortedPosts } from "@/utils/content-utils";
+
+const posts = await getSortedPosts();
+
+const page = {
+	data: posts,
+	start: 0,
+	end: posts.length,
+	size: posts.length,
+	total: posts.length,
+	currentPage: 1,
+	lastPage: 1,
+	url: {
+		current: "/works/",
+		prev: undefined,
+		next: undefined,
+		first: "/works/",
+		last: "/works/",
+	},
+} as unknown as Page<CollectionEntry<"posts">>;
+---
+
+<MainGridLayout title="作品" description="鸡腿做过的游戏与交互 Demo。">
+  <div id="category-bar-wrapper" data-theme-only="aemeath">
+    <CategoryBar />
+  </div>
+  <PureBlog page={page} heading="作品" />
+  <div data-theme-only="aemeath">
+    <PostPage page={page} />
+  </div>
+</MainGridLayout>

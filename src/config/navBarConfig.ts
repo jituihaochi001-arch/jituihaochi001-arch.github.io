@@ -14,12 +14,19 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 	const links: NavBarLink[] = [
 		// 主页
 		LinkPresets.Home,
-		// 作品集：文章归档
+		// 作品集：作品卡片列表
 		{
 			name: "作品",
-			url: "/archive/",
+			url: "/works/",
 			icon: "material-symbols:grid-view-rounded",
-			activePaths: ["/posts/", "/archive/"],
+			activePaths: ["/works/", "/posts/"],
+		},
+		// 文章：按年份归档的时间线
+		{
+			name: "文章",
+			url: "/archive/",
+			icon: "material-symbols:article-rounded",
+			activePaths: ["/archive/"],
 		},
 		// 关于：经历、技能与联系方式
 		LinkPresets.About,

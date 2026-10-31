@@ -51,7 +51,7 @@ import { Icon } from "astro-icon/components";
       if (inWorks === lastHomeSection) return;
       lastHomeSection = inWorks;
       var syncNav = window.__fireflySyncNavbarActiveState;
-      if (typeof syncNav === "function") syncNav(inWorks ? "/archive/" : "/");
+      if (typeof syncNav === "function") syncNav(inWorks ? "/works/" : "/");
     }
 
     function onScroll() {
