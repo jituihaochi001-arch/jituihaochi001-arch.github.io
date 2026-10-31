@@ -242,11 +242,6 @@ export const en: Translation = {
 	[Key.minute]: "minute",
 	[Key.second]: "second",
 
-	// Page Views Statistics
-	[Key.pageViews]: "Views",
-	[Key.pageViewsLoading]: "Loading...",
-	[Key.pageViewsError]: "Stats unavailable",
-
 	// Pinned
 	[Key.pinned]: "Pinned",
 

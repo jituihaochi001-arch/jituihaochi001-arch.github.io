@@ -1,9 +1,4 @@
 ---
-import GoogleAnalytics from "@components/analytics/GoogleAnalytics.astro";
-import La51Analytics from "@components/analytics/La51Analytics.astro";
-import MicrosoftClarity from "@components/analytics/MicrosoftClarity.astro";
-import UmamiAnalytics from "@components/analytics/UmamiAnalytics.astro";
-import UmamiMetrics from "@components/analytics/UmamiMetrics.astro";
 import FriendsRuntimeManager from "@components/friends/FriendsRuntimeManager.astro";
 import ChangelogManager from "@components/features/ChangelogManager.astro";
 import FancyboxManager from "@components/features/FancyboxManager.astro";
@@ -19,7 +14,6 @@ import ConfigCarrier from "@components/layout/ConfigCarrier.astro";
 import ThemeBootstrap from "@/components/themes/ThemeBootstrap.astro";
 
 import {
-	analyticsConfig,
 	backgroundWallpaper,
 	expressiveCodeConfig,
 	profileConfig,
@@ -159,46 +153,6 @@ const canonicalUrl = new URL(
     <ThemeBootstrap
       pureStylesheets={pureStylesheets}
     />
-    {analyticsConfig?.googleAnalyticsId && (
-            <GoogleAnalytics analyticsId={analyticsConfig.googleAnalyticsId} />
-    )}
-    {analyticsConfig?.microsoftClarityId && (
-            <MicrosoftClarity clarityId={analyticsConfig.microsoftClarityId} />
-    )}
-        {analyticsConfig?.umamiAnalytics?.websiteId && (
-          <UmamiAnalytics
-          websiteId={analyticsConfig.umamiAnalytics.websiteId}
-          scriptUrl={analyticsConfig.umamiAnalytics.scriptUrl}
-          hostUrl={analyticsConfig.umamiAnalytics.hostUrl}
-          replaysScriptUrl={analyticsConfig.umamiAnalytics.replaysScriptUrl}
-          trackOutboundLinks={analyticsConfig.umamiAnalytics.trackOutboundLinks}
-          collectWebVitals={analyticsConfig.umamiAnalytics.collectWebVitals}
-          replays={analyticsConfig.umamiAnalytics.replays}
-          localPreview={isLocalPreview}
-          />
-        )}
-        {analyticsConfig?.umamiAnalytics?.websiteId &&
-          analyticsConfig.umamiAnalytics.shareId &&
-          analyticsConfig.umamiAnalytics.shareApiBase && (
-            <UmamiMetrics
-              shareId={analyticsConfig.umamiAnalytics.shareId}
-              shareApiBase={analyticsConfig.umamiAnalytics.shareApiBase}
-			  historicalVisitors={analyticsConfig.umamiAnalytics.historicalStats?.visitors}
-			  historicalPageviews={analyticsConfig.umamiAnalytics.historicalStats?.pageviews}
-              localPreview={isLocalPreview}
-            />
-          )}
-        {analyticsConfig?.la51Analytics?.Id && (
-            <La51Analytics
-            analyticsId={analyticsConfig.la51Analytics.Id}
-            sdkUrl={analyticsConfig.la51Analytics?.sdkUrl}
-            ck={analyticsConfig.la51Analytics?.ck}
-            autoTrack={analyticsConfig.la51Analytics?.autoTrack}
-            hashMode={analyticsConfig.la51Analytics?.hashMode}
-            screenRecord={analyticsConfig.la51Analytics?.screenRecord}
-            />
-    )}
-
     <title>{pageTitle}</title>
     <meta
       name="description"

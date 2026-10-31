@@ -8,7 +8,6 @@ export type CommentConfig = {
 		envId: string;
 		region?: string;
 		lang?: string;
-		visitorCount?: boolean;
 		/**
 		 * Twikoo JS 文件地址，支持 CDN 链接
 		 * 国内推荐: https://registry.npmmirror.com/twikoo/1.7.9/files/dist/twikoo.min.js
@@ -26,7 +25,6 @@ export type CommentConfig = {
 		emoji: string[];
 		login?: "enable" | "force" | "disable";
 		requiredMeta?: Array<"nick" | "mail" | "link">;
-		visitorCount?: boolean; // 是否统计访问量，true 启用访问量，false 关闭
 	};
 	artalk?: {
 		// 后端程序 API 地址
@@ -42,8 +40,6 @@ export type CommentConfig = {
 		 * - "ru" (Русский)
 		 * */
 		locale: string | "auto";
-		// 是否统计访问量，true 启用访问量，false 关闭
-		visitorCount?: boolean;
 	};
 	giscus?: {
 		repo: string;

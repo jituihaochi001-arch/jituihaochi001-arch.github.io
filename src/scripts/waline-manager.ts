@@ -22,25 +22,6 @@ import {
 	runtimeWindow.__rainztWalineManagerStarted = true;
 
 	const rootSelector = "[data-waline-root]";
-	const localPreviewHosts = new Set([
-		"localhost",
-		"127.0.0.1",
-		"::1",
-		"0.0.0.0",
-	]);
-	const isLocalPreview =
-		localPreviewHosts.has(window.location.hostname.toLowerCase()) ||
-		window.location.protocol === "file:";
-
-	const hideLocalPageviewCounters = () => {
-		if (!isLocalPreview) return;
-		document.documentElement.dataset.analyticsMode = "local";
-		document
-			.querySelectorAll<HTMLElement>(".waline-pageview-count")
-			.forEach((element) => {
-				element.parentElement?.setAttribute("hidden", "true");
-			});
-	};
 
 	type WalineInit = typeof import("@waline/client").init;
 	let walineModulePromise: Promise<WalineInit> | undefined;
@@ -3683,7 +3664,6 @@ import {
 	};
 
 	const initWaline = async (root: HTMLElement) => {
-		hideLocalPageviewCounters();
 		if (!root.isConnected || document.querySelector(rootSelector) !== root)
 			return;
 		if (root === activeRoot && root.dataset.walineReady === "true") return;
@@ -3731,7 +3711,6 @@ import {
 			const runtimeConfig = {
 				...config,
 				emoji,
-				...(isLocalPreview ? { pageview: false } : {}),
 			};
 			const instance = init({
 				...runtimeConfig,
@@ -3772,9 +3751,6 @@ import {
 	};
 
 	const observeWalineRoot = (root: HTMLElement) => {
-		const config = getConfig(root);
-		const shouldLoadPageviewEarly =
-			!isLocalPreview && config?.pageview === true;
 		const target = root.closest<HTMLElement>("#post-comments") || root;
 		if (observedTarget === target) return;
 
@@ -3782,8 +3758,7 @@ import {
 		if (
 			window.location.hash ||
 			window.matchMedia("(max-width: 580px)").matches ||
-			!("IntersectionObserver" in window) ||
-			shouldLoadPageviewEarly
+			!("IntersectionObserver" in window)
 		) {
 			void initWaline(root);
 			return;

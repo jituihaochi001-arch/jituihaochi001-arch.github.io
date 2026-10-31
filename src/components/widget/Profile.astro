@@ -1,7 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
 import ImageWrapper from "@/components/common/ImageWrapper.astro";
-import { analyticsConfig } from "@/config/analyticsConfig";
 import { profileConfig } from "@/config/profileConfig";
 import { url } from "@/utils/url-utils";
 
@@ -12,13 +11,6 @@ interface Props {
 
 const { style } = Astro.props;
 const className = Astro.props.class;
-const umamiAnalytics = analyticsConfig.umamiAnalytics;
-const showUmamiStats = Boolean(
-	umamiAnalytics?.websiteId &&
-		umamiAnalytics.shareId &&
-		umamiAnalytics.shareApiBase &&
-		umamiAnalytics.showSiteStats !== false,
-);
 const socialLinks = [
 	...profileConfig.links,
 	{
@@ -72,18 +64,6 @@ const socialLinks = [
 			)}
 			<span class="profile-copy-toast" role="status" aria-live="polite"></span>
 		</nav>
-		{showUmamiStats && (
-			<div class="profile-stats" aria-label="站点访问统计">
-				<div class="profile-stat">
-					<span class="profile-stat-label"><Icon is:inline name="material-symbols:group-outline" aria-hidden="true" />累计访客</span>
-					<strong data-umami-stat="visitors" aria-live="polite">加载中</strong>
-				</div>
-				<div class="profile-stat">
-					<span class="profile-stat-label"><Icon is:inline name="material-symbols:visibility-outline-rounded" aria-hidden="true" />总浏览量</span>
-					<strong data-umami-stat="pageviews" aria-live="polite">加载中</strong>
-				</div>
-			</div>
-		)}
 	</div>
 </div>
 
@@ -200,68 +180,6 @@ const socialLinks = [
 	.profile-social :global(svg) {
 		width: 1.25rem;
 		height: 1.25rem;
-	}
-
-	.profile-stats {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 0.55rem;
-		margin-top: 0.8rem;
-	}
-
-	.profile-stat {
-		padding: 0.55rem 0.3rem;
-		border: 1px solid rgb(120 120 120 / 16%);
-		border-radius: 0.625rem;
-		background: transparent;
-		box-shadow:
-			0 2px 5px rgb(38 38 38 / 7%),
-			0 1px 2px rgb(38 38 38 / 4%),
-			inset 0 1px 0 rgb(255 255 255 / 80%),
-			inset 0 -1px 0 rgb(112 112 112 / 10%);
-		transition: box-shadow 220ms ease;
-	}
-
-	.profile-stat:hover {
-		border-style: dashed;
-		border-color: rgb(120 120 120 / 42%);
-		box-shadow:
-			0 3px 6px rgb(38 38 38 / 10%),
-			0 1px 2px rgb(38 38 38 / 5%),
-			inset 0 1px 0 rgb(255 255 255 / 90%),
-			inset 0 -1px 0 rgb(112 112 112 / 16%);
-	}
-
-	:global(.dark) .profile-stat {
-		border-color: rgb(224 224 224 / 20%);
-	}
-
-	:global(.dark) .profile-stat:hover {
-		border-color: rgb(230 230 230 / 42%);
-	}
-
-	.profile-stat-label {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 0.15rem;
-		color: var(--text-color);
-		font-size: 0.68rem;
-		font-weight: 600;
-	}
-
-	.profile-stat-label :global(svg) {
-		width: 0.95rem;
-		height: 0.95rem;
-		color: var(--primary);
-	}
-
-	.profile-stat strong {
-		display: block;
-		margin-top: 0.1rem;
-		color: var(--text-color);
-		font-size: 0.9rem;
-		font-variant-numeric: tabular-nums;
 	}
 
 	.profile-copy-toast {

@@ -232,11 +232,6 @@ enum I18nKey {
 	minute = "minute",
 	second = "second",
 
-	// 访问量统计
-	pageViews = "pageViews",
-	pageViewsLoading = "pageViewsLoading",
-	pageViewsError = "pageViewsError",
-
 	// 置顶
 	pinned = "pinned",
 

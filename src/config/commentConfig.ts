@@ -9,8 +9,6 @@ export const commentConfig: CommentConfig = {
 		envId: "https://twikoo.vercel.app",
 		// 设置 Twikoo 评论系统语言
 		lang: "zh-CN",
-		// 是否启用文章访问量统计功能
-		visitorCount: true,
 		// Twikoo JS 文件地址，支持 CDN 链接
 		// 中国推荐1: https://registry.npmmirror.com/twikoo/1.7.12/files/dist/twikoo.min.js
 		// 中国推荐2: https://s4.zstatic.net/npm/twikoo@1.7.13/dist/twikoo.min.js
@@ -39,8 +37,6 @@ export const commentConfig: CommentConfig = {
 		login: "enable",
 		// 留言必须填写昵称和邮箱，缺少任一项时 Waline 会阻止提交。
 		requiredMeta: ["nick", "mail"],
-		// 是否启用文章访问量统计功能
-		visitorCount: true,
 	},
 
 	// artalk评论系统配置
@@ -49,8 +45,6 @@ export const commentConfig: CommentConfig = {
 		server: "https://artalk.example.com/",
 		// 设置 Artalk 语言
 		locale: "zh-CN",
-		// 是否启用文章访问量统计功能
-		visitorCount: true,
 	},
 
 	//giscus评论系统配置

@@ -53,13 +53,13 @@
   </a>
 </p>
 
-> 截图取自线上站点。留言板、访问统计等需要外部服务的模块在未配置时保留空状态。
+> 截图取自线上站点。留言板等需要外部服务的模块在未配置时保留空状态。
 
 ## 项目简介
 
 这个仓库放着作品集站点的全部源码。它用来记录做过的游戏与 Demo、整理技能栈、留一个能找到我的入口：首页负责第一眼，作品页按时间铺开项目，关于页写技能和个人项目，留言板只做展示，不开放提交。
 
-内容用 Markdown / MDX 写在 `src/content/` 下，构建时生成静态页面，没有数据库和运行时服务。评论、访问统计这类能力保留在主题里，默认不接入，页脚会显示「未配置」。
+内容用 Markdown / MDX 写在 `src/content/` 下，构建时生成静态页面，没有数据库和运行时服务。评论这类能力保留在主题里，默认不接入。
 
 ## 页面一览
 
@@ -121,7 +121,7 @@ pnpm dev
 | [`siteThemeConfig.ts`](src/config/siteThemeConfig.ts) | 默认主题与主题切换开关 |
 | [`effectsConfig.ts`](src/config/effectsConfig.ts) | 飘落特效（星星 / 樱花 / 雨滴）参数 |
 | [`musicConfig.ts`](src/config/musicConfig.ts) | 侧栏音乐列表 |
-| [`commentConfig.ts`](src/config/commentConfig.ts)、[`analyticsConfig.ts`](src/config/analyticsConfig.ts) | 留言与访问统计服务，默认留空 |
+| [`commentConfig.ts`](src/config/commentConfig.ts) | 留言服务，默认留空 |
 
 页面的独立内容放在 `src/content/`：
 

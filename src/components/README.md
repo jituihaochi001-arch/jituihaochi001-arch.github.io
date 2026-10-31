@@ -126,15 +126,6 @@ Aemeath 项目中所有可复用组件的集中管理。组件按照功能和职
 - `Twikoo.astro` - Twikoo 评论集成
 - `Waline.astro` - Waline 评论集成
 
-### 📊 analytics/ - 数据统计组件
-
-网站分析和统计集成组件。
-
-- `GoogleAnalytics.astro` - Google Analytics
-- `La51Analytics.astro` - 51la 统计
-- `MicrosoftClarity.astro` - Microsoft Clarity
-- `UmamiAnalytics.astro` - Umami 统计
-
 ### 🔧 misc/ - 杂项工具组件
 
 其他辅助和工具类组件。
@@ -156,5 +147,4 @@ Aemeath 项目中所有可复用组件的集中管理。组件按照功能和职
 | **features/** | 全局功能特效 | 全局加载的增强功能 |
 | **pages/** | 页面特定组件 | 仅在特定页面使用 |
 | **comment/** | 评论系统 | 第三方服务集成 |
-| **analytics/** | 数据统计 | 分析和统计服务 |
 | **misc/** | 工具和辅助 | 其他杂项功能 |

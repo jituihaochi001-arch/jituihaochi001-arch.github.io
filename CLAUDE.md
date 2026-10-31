@@ -35,11 +35,11 @@ All features are toggled/configured via TypeScript files in `src/config/`, expor
 
 - `siteConfig.ts` — core site settings, theme, pagination
 - `sidebarConfig.ts` — sidebar layout (left/right/both, widget ordering)
-- `commentConfig.ts`, `analyticsConfig.ts`, `fontConfig.ts`, etc.
+- `commentConfig.ts`, `fontConfig.ts`, etc.
 
 ### Layout System
 
-- `Layout.astro` — base HTML shell (head, body, theme init, analytics, Swup hooks)
+- `Layout.astro` — base HTML shell (head, body, theme init, Swup hooks)
 - `MainGridLayout.astro` — full page grid with sidebar(s), navbar, wallpaper, footer
 
 ### Content Collections

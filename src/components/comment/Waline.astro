@@ -1,7 +1,6 @@
 ---
 import "@waline/client/style";
 import {
-	analyticsConfig,
 	commentConfig,
 	getEnabledFriends,
 	siteConfig,
@@ -25,16 +24,6 @@ const config = {
 	path: Astro.props.path,
 	dark: "html.dark",
 	wordLimit: ["2", "300"],
-	// Umami 配置完成后，页面访问量统一由 Umami 记录，避免重复计数与额外请求。
-	...(commentConfig.waline?.visitorCount &&
-	!(
-		analyticsConfig.umamiAnalytics?.websiteId &&
-		analyticsConfig.umamiAnalytics.shareId &&
-		analyticsConfig.umamiAnalytics.shareApiBase &&
-		analyticsConfig.umamiAnalytics.showPageViews !== false
-	)
-		? { pageview: true }
-		: {}),
 	...(import.meta.env.DEV ||
 	["localhost", "127.0.0.1", "::1", "0.0.0.0"].includes(
 		Astro.url.hostname.toLowerCase(),

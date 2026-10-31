@@ -1,13 +1,12 @@
 ---
 import { Icon } from "astro-icon/components";
-import { footerConfig, analyticsConfig, profileConfig, siteConfig } from "@/config";
+import { footerConfig, profileConfig, siteConfig } from "@/config";
 import { url } from "@/utils/url-utils";
 
 import FooterOrbit from "./FooterOrbit.astro";
 
 import "@/styles/footer.css";
 
-const statsReady = Boolean(analyticsConfig.umamiAnalytics?.websiteId && analyticsConfig.umamiAnalytics.shareId && analyticsConfig.umamiAnalytics.shareApiBase);
 const currentYear = new Date().getFullYear();
 const startAt = new Date(`${siteConfig.siteStartDate}T00:00:00+08:00`);
 const elapsedSeconds = Math.max(
@@ -102,28 +101,6 @@ const techStack: {
 					本站已萌萌哒 <strong>{initialDays}</strong> 天 <strong>{initialHours}</strong> 小时 <strong>{initialMinutes}</strong> 分 <strong>{initialSeconds}</strong> 秒
 				</time>
 				<span class="site-footer__runtime-sparkle" aria-hidden="true">✦</span>
-			</div>
-
-			<div class="site-footer__traffic" aria-label="网站访问统计">
-				<span class="site-footer__traffic-item">
-					<span>今日访客：</span>
-					<strong data-umami-stat="todayVisitors" aria-live="polite">{statsReady ? "加载中" : "未配置"}</strong>
-				</span>
-				<i aria-hidden="true">|</i>
-				<span class="site-footer__traffic-item">
-					<span>今日访问：</span>
-					<strong data-umami-stat="todayPageviews" aria-live="polite">{statsReady ? "加载中" : "未配置"}</strong>
-				</span>
-				<i aria-hidden="true">|</i>
-				<span class="site-footer__traffic-item">
-					<span>本站访客：</span>
-					<strong data-umami-stat="visitors" aria-live="polite">{statsReady ? "加载中" : "未配置"}</strong>
-				</span>
-				<i aria-hidden="true">|</i>
-				<span class="site-footer__traffic-item">
-					<span>本站访问：</span>
-					<strong data-umami-stat="pageviews" aria-live="polite">{statsReady ? "加载中" : "未配置"}</strong>
-				</span>
 			</div>
 
 			<div class="site-footer__divider" aria-hidden="true">

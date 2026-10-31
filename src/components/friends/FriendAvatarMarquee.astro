@@ -52,8 +52,6 @@ const normalizeFriendUrl = (url: string) =>
 							title={friend.title}
 							tabindex={copy === 0 || blocked ? -1 : undefined}
 							draggable="false"
-							data-umami-event={isOwnSite || blocked ? undefined : "friend-link-click"}
-							data-umami-event-site={isOwnSite || blocked ? undefined : friend.siteurl}
 						>
 							<img
 								src={friend.imgurl}

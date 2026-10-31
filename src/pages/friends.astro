@@ -256,8 +256,6 @@ const description =
                 }
                 data-tags={item.tags?.join(",")}
                 style={avatarTagStyle(item.imgurl)}
-                data-umami-event={isOwnSite ? undefined : "friend-link-click"}
-                data-umami-event-site={isOwnSite ? undefined : item.siteurl}
                 class:list={[
                   "friend-card friend-list-card group flex items-center gap-3 p-2.5 rounded-xl relative overflow-visible",
                   isOwnSite && "friend-card--own",
@@ -318,7 +316,7 @@ const description =
                     <span class:list={["friend-latency", `friend-latency--${latency.state}`]} title={latency.label} aria-label={latency.label}>
                       <span class="friend-latency-dot" aria-hidden="true"></span>
                       {latency.value.endsWith("ms") ? (
-                        <><span>{latency.value.slice(0, -2)}</span><span class="friend-click-count-unit" aria-hidden="true">ms</span></>
+                        <><span>{latency.value.slice(0, -2)}</span><span class="friend-latency-unit" aria-hidden="true">ms</span></>
                       ) : <span>{latency.value}</span>}
                     </span>
                 </div>
@@ -367,19 +365,6 @@ const description =
                   ) : (
                     <span class="friend-rss-updated" title={rssLabel}>RSS 暂无</span>
                   )}
-                </div>
-                <div class="friend-card-footer__metrics">
-                <span
-                  class="friend-click-count"
-                  data-friend-clicks-for={isOwnSite ? undefined : item.siteurl}
-                  title={isOwnSite ? "本站总访问次数" : "从本站点击次数"}
-                  aria-label={isOwnSite ? "本站总访问次数" : `${item.title}，从本站点击次数`}
-                >
-                  <Icon is:inline name="material-symbols:ads-click-rounded" aria-hidden="true" />
-                  <span data-friend-clicks-value={isOwnSite ? undefined : true} data-friend-site-pageviews={isOwnSite ? true : undefined} aria-live="polite">…</span>
-                  <span class="friend-click-count-unit" aria-hidden="true">次</span>
-                </span>
-
                 </div>
               </div>
 
@@ -950,87 +935,10 @@ const description =
       box-shadow: 0 1.15rem 3rem rgba(0, 0, 0, 0.42);
     }
 
-    .friend-click-count {
-      position: absolute;
-      top: 0.55rem;
-      right: 0.62rem;
-      z-index: 24;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.2rem;
-      min-width: 2.45rem;
-      height: 1.72rem;
-      padding: 0 0.5rem;
-      border: 1px dashed rgba(255, 246, 219, 0.42);
-      border-radius: 8px 11px 7px 10px;
-      background-color: transparent;
-      box-shadow:
-        0 0.3rem 0.5rem rgba(17, 17, 25, 0.12),
-        0 0.08rem 0.24rem rgba(17, 17, 25, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.22);
-      color: color-mix(in srgb, var(--content-meta) 88%, var(--text-color));
-      font-size: 0.68rem;
-      font-weight: 800;
-      font-variant-numeric: tabular-nums;
-      line-height: 1;
-      white-space: nowrap;
-      pointer-events: none;
-      transform: none;
-      transition:
-        border-color 220ms ease,
-        color 220ms ease,
-        box-shadow 220ms ease,
-        transform 220ms ease;
-    }
-
-    :is(.friend-click-count, .friend-latency) svg {
-      width: 0.8rem;
-      height: 0.8rem;
-      flex: none;
-      color: var(--primary);
-    }
-
-    .friend-click-count-unit {
+    .friend-latency-unit {
       color: color-mix(in srgb, currentColor 72%, transparent);
       font-size: 0.6rem;
       font-weight: 700;
-    }
-
-    .friend-card:hover .friend-click-count,
-    .friend-card:focus-visible .friend-click-count {
-      border-color: rgba(255, 246, 219, 0.62);
-      box-shadow:
-        0 0.34rem 0.5rem rgba(17, 17, 25, 0.16),
-        0 0.1rem 0.26rem rgba(17, 17, 25, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-      color: var(--primary);
-      transform: translateY(-0.04rem);
-    }
-
-    :global(.dark) .friend-click-count {
-      border-color: rgba(255, 246, 219, 0.26);
-      background-color: transparent;
-      color: color-mix(in srgb, var(--content-meta) 92%, white);
-    }
-
-    .friend-card--recommended .friend-click-count {
-      color: #9a6a0b;
-    }
-
-    .friend-card--recommended .friend-click-count svg {
-      color: #d69712;
-    }
-
-    :global(.dark) .friend-card--recommended .friend-click-count {
-      color: #f4cd6b;
-    }
-
-    :global(.dark) .friend-card--recommended .friend-click-count svg {
-      color: #f1be4c;
-    }
-
-    .friend-card-content {
-      padding-right: 4.65rem;
     }
 
     .friend-card {
@@ -1054,8 +962,7 @@ const description =
     }
 
     .friend-card-footer,
-    .friend-card-footer__identity,
-    .friend-card-footer__metrics {
+    .friend-card-footer__identity {
       display: contents;
     }
 
@@ -1884,32 +1791,12 @@ const description =
       min-width: 0;
     }
 
-    html[data-site-theme="aemeath"] #aemeath-shell .friend-list-card :is(.friend-card-footer__identity, .friend-card-footer__metrics) {
+    html[data-site-theme="aemeath"] #aemeath-shell .friend-list-card .friend-card-footer__identity {
       display: flex;
       align-items: center;
       flex-wrap: wrap;
       gap: 8px;
       min-width: 0;
-    }
-
-    html[data-site-theme="aemeath"] #aemeath-shell .friend-list-card .friend-card-footer__metrics {
-      margin-left: auto;
-    }
-
-    html[data-site-theme="aemeath"] #aemeath-shell .friend-list-card .friend-click-count {
-      position: static;
-      inset: auto;
-      min-width: 0;
-      height: auto;
-      min-height: 20px;
-      padding: 0;
-      border: 0;
-      border-radius: 0;
-      background: none;
-      box-shadow: none;
-      font-size: 10px;
-      font-weight: 500;
-      transform: none;
     }
 
     html[data-site-theme="aemeath"] #aemeath-shell .friend-list-card .friend-recommended-badge {
@@ -1951,14 +1838,9 @@ const description =
       font-variant-numeric: tabular-nums;
     }
 
-    html[data-site-theme="aemeath"] #aemeath-shell .friend-list-card .friend-click-count-unit {
+    html[data-site-theme="aemeath"] #aemeath-shell .friend-list-card .friend-latency-unit {
       font-size: 9.6px;
       font-weight: 700;
-    }
-
-    html[data-site-theme="aemeath"] #aemeath-shell .friend-list-card :is(.friend-click-count, .friend-latency) svg {
-      width: 12.8px;
-      height: 12.8px;
     }
 
     html[data-site-theme="aemeath"] #aemeath-shell .friend-list-card .friend-card-avatar-backdrop {

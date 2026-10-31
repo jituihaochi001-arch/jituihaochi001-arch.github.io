@@ -244,11 +244,6 @@ export const ru: Translation = {
 	[Key.minute]: "минута",
 	[Key.second]: "секунда",
 
-	// Статистика просмотров
-	[Key.pageViews]: "Просмотры",
-	[Key.pageViewsLoading]: "Загрузка...",
-	[Key.pageViewsError]: "Статистика недоступна",
-
 	// Закреплено
 	[Key.pinned]: "Закреплено",
 

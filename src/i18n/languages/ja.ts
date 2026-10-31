@@ -241,11 +241,6 @@ export const ja: Translation = {
 	[Key.minute]: "分",
 	[Key.second]: "秒",
 
-	// ページビュー統計
-	[Key.pageViews]: "閲覧数",
-	[Key.pageViewsLoading]: "読み込み中...",
-	[Key.pageViewsError]: "統計利用不可",
-
 	// ピン留め
 	[Key.pinned]: "ピン留め",
 

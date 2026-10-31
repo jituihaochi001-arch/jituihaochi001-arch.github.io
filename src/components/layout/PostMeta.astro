@@ -1,6 +1,5 @@
 ---
 import { Icon } from "astro-icon/components";
-import { analyticsConfig, commentConfig } from "@/config";
 import PostAiNotice from "@/components/common/PostAiNotice.astro";
 import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
@@ -14,7 +13,6 @@ export interface Props {
 	tags?: string[];
 	hideUpdateDate?: boolean;
 	hideTagsForMobile?: boolean;
-	isHome?: boolean;
 	className?: string;
 	id?: string;
 	aiPolished?: boolean;
@@ -23,7 +21,6 @@ export interface Props {
 	showTags?: boolean;
 	maxTags?: number;
 	showNoTags?: boolean;
-	customPath?: string;
 	pinned?: boolean;
 	password?: boolean;
 }
@@ -35,7 +32,6 @@ const {
 	tags,
 	hideUpdateDate,
 	hideTagsForMobile,
-	isHome,
 	className = "",
 	id,
 	showPublished = true,
@@ -43,33 +39,12 @@ const {
 	showTags = true,
 	maxTags,
 	showNoTags = true,
-	customPath,
 	pinned,
 	aiPolished = true,
 } = Astro.props;
 
-const path = customPath || (id ? `/posts/${id}` : "");
 const visibleTags =
 	typeof maxTags === "number" ? tags?.slice(0, maxTags) : tags;
-const umamiAnalytics = analyticsConfig.umamiAnalytics;
-const localPreviewHostnames = new Set([
-	"localhost",
-	"127.0.0.1",
-	"::1",
-	"0.0.0.0",
-]);
-const isLocalPreview =
-	import.meta.env.DEV ||
-	localPreviewHostnames.has(Astro.url.hostname.toLowerCase());
-const useUmamiPageViews = Boolean(
-	!isLocalPreview &&
-		!isHome &&
-		id &&
-		umamiAnalytics?.websiteId &&
-		umamiAnalytics.shareId &&
-		umamiAnalytics.shareApiBase &&
-		umamiAnalytics.showPageViews !== false,
-);
 ---
 
 <div
@@ -186,111 +161,6 @@ const useUmamiPageViews = Boolean(
         </div>
       </div>
     )
-  }
-
-  {
-    useUmamiPageViews && (
-      <div class="flex items-center">
-        <div class="meta-icon">
-          <Icon
-            is:inline
-            name="material-symbols:visibility-outline-rounded"
-            class="text-xl"
-          />
-        </div>
-        <span class="text-50 text-sm font-medium mr-1">
-          {i18n(I18nKey.pageViews)}
-        </span>
-        <span
-          class="text-50 text-sm font-medium"
-          data-umami-pageviews={path}
-          aria-live="polite"
-        >
-          …
-        </span>
-      </div>
-    )
-  }
-
-  {
-    !isLocalPreview &&
-      !isHome &&
-      commentConfig.type === "twikoo" &&
-      commentConfig.twikoo?.visitorCount &&
-      !useUmamiPageViews &&
-      id && (
-        <div class="flex items-center">
-          <div class="meta-icon">
-            <Icon
-              is:inline
-              name="material-symbols:visibility-outline-rounded"
-              class="text-xl"
-            />
-          </div>
-          <span class="text-50 text-sm font-medium mr-1">
-            {i18n(I18nKey.pageViews)}
-          </span>
-          <span class="text-50 text-sm font-medium" id="twikoo_visitors">
-            {i18n(I18nKey.pageViewsLoading)}
-          </span>
-        </div>
-      )
-  }
-
-  {
-    !isLocalPreview &&
-      !isHome &&
-      commentConfig.type === "waline" &&
-      commentConfig.waline?.visitorCount &&
-      !useUmamiPageViews &&
-      id && (
-        <div class="flex items-center">
-          <div class="meta-icon">
-            <Icon
-              is:inline
-              name="material-symbols:visibility-outline-rounded"
-              class="text-xl"
-            />
-          </div>
-          <span class="text-50 text-sm font-medium mr-1">
-            {i18n(I18nKey.pageViews)}
-          </span>
-          <span
-            class="text-50 text-sm font-medium waline-pageview-count"
-            data-path={path}
-          >
-            {i18n(I18nKey.pageViewsLoading)}
-          </span>
-        </div>
-      )
-  }
-
-  {
-    !isLocalPreview &&
-      !isHome &&
-      commentConfig.type === "artalk" &&
-      commentConfig.artalk?.visitorCount &&
-      !useUmamiPageViews &&
-      id && (
-        <div class="flex items-center">
-          <div class="meta-icon">
-            <Icon
-              is:inline
-              name="material-symbols:visibility-outline-rounded"
-              class="text-xl"
-            />
-          </div>
-          <span class="text-50 text-sm font-medium mr-1">
-            {i18n(I18nKey.pageViews)}
-          </span>
-          <span
-            class="text-50 text-sm font-medium artalk-pv-count"
-            data-path={path}
-          >
-            {i18n(I18nKey.pageViewsLoading)}
-          </span>
-        </div>
-      )
   }
 
   {

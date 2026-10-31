@@ -53,13 +53,13 @@ A profile card and sidebar widgets on the left, the public README, skill wall, p
   </a>
 </p>
 
-> Screenshots come from the live site. Modules that need external services, such as comments and traffic stats, stay in an empty state until configured.
+> Screenshots come from the live site. Modules that need external services, such as comments, stay in an empty state until configured.
 
 ## Overview
 
 This repository holds the full source of the portfolio. It collects the games and demos I have shipped, the tools I work with, and a way to reach me: the home page sets the tone, the archive lists projects over time, the about page details skills and personal work, and the guestbook is display-only.
 
-Content lives in `src/content/` as Markdown and MDX and is turned into static pages at build time — no database, no runtime service. Comment and analytics integrations ship with the theme but stay unconfigured, so the footer shows a "not configured" placeholder.
+Content lives in `src/content/` as Markdown and MDX and is turned into static pages at build time — no database, no runtime service. Comment integrations ship with the theme but stay unconfigured.
 
 ## Pages
 
@@ -119,7 +119,7 @@ Site settings live in `src/config/`:
 | [`siteThemeConfig.ts`](src/config/siteThemeConfig.ts) | Default theme and theme switcher |
 | [`effectsConfig.ts`](src/config/effectsConfig.ts) | Falling effect settings (stars, sakura, rain) |
 | [`musicConfig.ts`](src/config/musicConfig.ts) | Sidebar playlist |
-| [`commentConfig.ts`](src/config/commentConfig.ts), [`analyticsConfig.ts`](src/config/analyticsConfig.ts) | Comment and analytics services, empty by default |
+| [`commentConfig.ts`](src/config/commentConfig.ts) | Comment service, empty by default |
 
 Page-level copy lives in `src/content/`:
 

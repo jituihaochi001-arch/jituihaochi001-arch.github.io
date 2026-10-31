@@ -236,11 +236,6 @@ export const zh_TW: Translation = {
 	[Key.minute]: "分",
 	[Key.second]: "秒",
 
-	// 訪問量統計
-	[Key.pageViews]: "瀏覽量",
-	[Key.pageViewsLoading]: "載入中...",
-	[Key.pageViewsError]: "統計不可用",
-
 	// 置頂
 	[Key.pinned]: "置頂",
 
