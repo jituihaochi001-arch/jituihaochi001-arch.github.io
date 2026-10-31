@@ -22,8 +22,6 @@ const showTitle = widgetConfig?.showTitle !== false;
 
 // ---- 构建时收集版本和环境信息 ----
 
-const themeVersion = siteConfig.themeVersion || "V1.1.1";
-
 // Astro 版本（从已安装的 astro 包读取）
 let astroVersion = "unknown";
 try {
@@ -115,11 +113,6 @@ const detailItems: {
 		label: i18n(I18nKey.siteInfoDomain),
 		value: siteDomain,
 		fullWidth: true,
-	},
-	{
-		icon: "mdi:clover",
-		label: "Aemeath",
-		value: themeVersion,
 	},
 	{
 		icon: "material-symbols:rocket-launch-outline",
