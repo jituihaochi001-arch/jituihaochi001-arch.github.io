@@ -311,7 +311,6 @@ enum I18nKey {
 	siteInfo = "siteInfo",
 	siteInfoBuildTime = "siteInfoBuildTime",
 	siteInfoBuildPlatform = "siteInfoBuildPlatform",
-	siteInfoBlogVersion = "siteInfoBlogVersion",
 	siteInfoAstroVersion = "siteInfoAstroVersion",
 	siteInfoNodeVersion = "siteInfoNodeVersion",
 	siteInfoPnpmVersion = "siteInfoPnpmVersion",

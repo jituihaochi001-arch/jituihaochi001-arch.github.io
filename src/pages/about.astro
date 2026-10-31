@@ -118,7 +118,7 @@ const handle = "@jituihaochi001-arch";
 		</header>
 
 		<nav class="profile-tabs" aria-label="关于我页面导航">
-			<a class="profile-tab profile-tab--active" href="/about/" aria-current="page">
+			<a class="profile-tab profile-tab--active" href="/about/" data-about-view-link="profile" aria-current="page">
 				<Icon is:inline name="material-symbols:person-outline-rounded" aria-hidden="true" />
 				<span>个人资料</span>
 			</a>
@@ -130,12 +130,13 @@ const handle = "@jituihaochi001-arch";
 				<Icon is:inline name="material-symbols:chat-bubble-outline-rounded" aria-hidden="true" />
 				<span>留言</span>
 			</a>
-			<a class="profile-tab" href="mailto:2868859415@qq.com">
+			<a class="profile-tab" href="/about/#mail" data-about-view-link="mail">
 				<Icon is:inline name="material-symbols:mail-outline-rounded" aria-hidden="true" />
 				<span>邮件</span>
 			</a>
 		</nav>
 
+		<div class="profile-view" data-about-view="profile">
 		<div class="profile-layout">
 			<main class="profile-main">
 				<section class="profile-panel profile-readme card-base" aria-labelledby="readme-title">
@@ -259,6 +260,31 @@ const handle = "@jituihaochi001-arch";
 				<a href="/guestbook/">读留言 <Icon is:inline name="material-symbols:arrow-right-alt-rounded" aria-hidden="true" /></a>
 			</div>
 		</footer>
+		</div>
+
+		<div class="profile-view" data-about-view="mail" hidden>
+			<section class="profile-panel profile-mail card-base" aria-labelledby="mail-title">
+				<header class="profile-section-heading">
+					<div>
+						<p class="profile-section-kicker">EMAIL</p>
+						<h2 id="mail-title">邮箱联系</h2>
+					</div>
+					<span class="profile-section-note">点地址直接发信 · 复制备用</span>
+				</header>
+				<div class="profile-mail-list">
+					<div class="profile-mail-item">
+						<span class="profile-mail-item__label">QQ 邮箱</span>
+						<a class="profile-mail-item__value" href="mailto:2868859415@qq.com">2868859415@qq.com</a>
+						<button type="button" class="profile-mail-copy" data-about-copy="2868859415@qq.com" aria-label="复制 QQ 邮箱"><em>复制</em></button>
+					</div>
+					<div class="profile-mail-item">
+						<span class="profile-mail-item__label">Gmail 邮箱</span>
+						<a class="profile-mail-item__value" href="mailto:jituihaochi001@gmail.com">jituihaochi001@gmail.com</a>
+						<button type="button" class="profile-mail-copy" data-about-copy="jituihaochi001@gmail.com" aria-label="复制 Gmail 邮箱"><em>复制</em></button>
+					</div>
+				</div>
+			</section>
+		</div>
 	</section>
 </MainGridLayout>
 
@@ -293,6 +319,68 @@ const handle = "@jituihaochi001-arch";
 				hint.textContent = original;
 			}, 1600);
 		});
+	})();
+</script>
+
+<script is:inline>
+	(() => {
+		if (window.__jituiAboutViewBound) return;
+		window.__jituiAboutViewBound = true;
+
+		const applyView = (view) => {
+			const root = document.querySelector(".github-profile");
+			if (!root) return;
+			root.querySelectorAll("[data-about-view]").forEach((panel) => {
+				panel.hidden = panel.getAttribute("data-about-view") !== view;
+			});
+			root.querySelectorAll("[data-about-view-link]").forEach((link) => {
+				const active = link.getAttribute("data-about-view-link") === view;
+				link.classList.toggle("profile-tab--active", active);
+				if (active) link.setAttribute("aria-current", "page");
+				else link.removeAttribute("aria-current");
+			});
+		};
+
+		const syncFromLocation = () => {
+			applyView(window.location.hash === "#mail" ? "mail" : "profile");
+		};
+
+		document.addEventListener(
+			"click",
+			(event) => {
+				const link =
+					event.target instanceof Element
+						? event.target.closest("[data-about-view-link]")
+						: null;
+				if (!link) return;
+				if (
+					event.button !== 0 ||
+					event.metaKey ||
+					event.ctrlKey ||
+					event.shiftKey ||
+					event.altKey
+				)
+					return;
+				event.preventDefault();
+				event.stopPropagation();
+				const view =
+					link.getAttribute("data-about-view-link") === "mail" ? "mail" : "profile";
+				applyView(view);
+				window.history.replaceState(
+					null,
+					"",
+					`${window.location.pathname}${window.location.search}${view === "mail" ? "#mail" : ""}`,
+				);
+			},
+			true,
+		);
+
+		syncFromLocation();
+		window.addEventListener("hashchange", syncFromLocation);
+		window.addEventListener("popstate", syncFromLocation);
+		document.addEventListener("swup:page:view", syncFromLocation);
+		document.addEventListener("swup:content:replace", syncFromLocation);
+		document.addEventListener("astro:page-load", syncFromLocation);
 	})();
 </script>
 
@@ -1399,6 +1487,87 @@ const handle = "@jituihaochi001-arch";
 		white-space: nowrap;
 	}
 
+	.profile-view[hidden] {
+		display: none;
+	}
+
+	.profile-mail {
+		display: grid;
+		gap: 0.85rem;
+	}
+
+	.profile-mail-list {
+		display: grid;
+		gap: 0.5rem;
+	}
+
+	.profile-mail-item {
+		display: grid;
+		grid-template-columns: minmax(4.2rem, auto) minmax(0, 1fr) auto;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.7rem 0.85rem;
+		border: 1px solid color-mix(in srgb, var(--primary) 14%, var(--line-divider));
+		border-radius: 0.72rem;
+		background: color-mix(in srgb, var(--primary) 4%, var(--card-bg));
+	}
+
+	.profile-mail-item__label {
+		color: var(--content-meta);
+		font-size: 0.72rem;
+		font-weight: 680;
+		white-space: nowrap;
+	}
+
+	.profile-mail-item__value {
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		color: var(--text-color);
+		font-size: 0.85rem;
+		font-weight: 620;
+		text-decoration: none;
+	}
+
+	.profile-mail-item__value:hover,
+	.profile-mail-item__value:focus-visible {
+		color: var(--primary);
+		text-decoration: underline;
+		text-underline-offset: 0.2rem;
+		outline: none;
+	}
+
+	.profile-mail-copy {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 1.75rem;
+		padding: 0 0.6rem;
+		border: 1px solid color-mix(in srgb, var(--primary) 24%, var(--line-divider));
+		border-radius: 0.5rem;
+		background: transparent;
+		color: var(--content-meta);
+		font-family: inherit;
+		font-size: 0.68rem;
+		font-weight: 650;
+		cursor: pointer;
+		transition: color 180ms ease, border-color 180ms ease, background-color 180ms ease;
+	}
+
+	.profile-mail-copy:hover,
+	.profile-mail-copy:focus-visible {
+		border-color: var(--primary);
+		color: var(--primary);
+		background: color-mix(in srgb, var(--primary) 8%, transparent);
+		outline: none;
+	}
+
+	.profile-mail-copy em {
+		font-style: normal;
+		white-space: nowrap;
+	}
+
 	.profile-footer {
 		display: flex;
 		align-items: center;
@@ -1560,6 +1729,16 @@ const handle = "@jituihaochi001-arch";
 		.profile-panel__meta,
 		.profile-section-note {
 			font-size: 0.62rem;
+		}
+
+		.profile-mail-item {
+			grid-template-columns: minmax(0, 1fr) auto;
+			gap: 0.4rem 0.6rem;
+			padding: 0.65rem 0.7rem;
+		}
+
+		.profile-mail-item__label {
+			grid-column: 1 / -1;
 		}
 
 		.profile-readme__quote {
