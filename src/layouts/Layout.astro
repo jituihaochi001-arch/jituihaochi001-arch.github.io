@@ -836,7 +836,6 @@ const canonicalUrl = new URL(
 		void import("@/scripts/pure-layout-runtime");
 	} else {
 		void import("@/scripts/aemeath-layout-runtime");
-		void import("@/scripts/aemeath-about-runtime");
 	}
 </script>
 
@@ -1033,5 +1032,118 @@ const canonicalUrl = new URL(
     bindSwupHooks();
     window[runtimeKey] = runtime;
     scheduleServerMetricsInit();
+  })();
+</script>
+
+<!-- 关于我页的标签切换与邮箱复制也交给持久布局：
+     Swup 只替换容器内容、不会重新执行被替换页面里的内联脚本，
+     绑在页面内会导致站内切页进入后点击「邮件」没有反应。 -->
+<script is:inline data-swup-ignore-script>
+  (() => {
+    const runtimeKey = "__jituiAboutRuntime";
+    const runtime = window[runtimeKey] || { bound: false };
+    window[runtimeKey] = runtime;
+    if (runtime.bound) return;
+    runtime.bound = true;
+
+    const viewLinkSelector = "[data-about-view-link]";
+    const copySelector = "[data-about-copy]";
+
+    const getRoot = () => document.querySelector(".github-profile");
+
+    const applyView = (view) => {
+      const root = getRoot();
+      if (!root) return;
+      root.querySelectorAll("[data-about-view]").forEach((panel) => {
+        panel.hidden = panel.getAttribute("data-about-view") !== view;
+      });
+      root.querySelectorAll(viewLinkSelector).forEach((link) => {
+        const active = link.getAttribute("data-about-view-link") === view;
+        link.classList.toggle("profile-tab--active", active);
+        if (active) link.setAttribute("aria-current", "page");
+        else link.removeAttribute("aria-current");
+      });
+    };
+
+    const syncFromLocation = () => {
+      if (!getRoot()) return;
+      applyView(window.location.hash === "#mail" ? "mail" : "profile");
+    };
+
+    const handleViewClick = (event) => {
+      const link =
+        event.target instanceof Element
+          ? event.target.closest(viewLinkSelector)
+          : null;
+      if (!link || !getRoot()) return;
+      if (
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey
+      )
+        return;
+      event.preventDefault();
+      event.stopPropagation();
+      const view =
+        link.getAttribute("data-about-view-link") === "mail" ? "mail" : "profile";
+      applyView(view);
+      window.history.replaceState(
+        null,
+        "",
+        `${window.location.pathname}${window.location.search}${view === "mail" ? "#mail" : ""}`,
+      );
+    };
+
+    const handleCopyClick = async (event) => {
+      const target =
+        event.target instanceof Element
+          ? event.target.closest(copySelector)
+          : null;
+      if (!target) return;
+      const value = target.getAttribute("data-about-copy") || "";
+      if (!value) return;
+
+      let copied = false;
+      try {
+        await navigator.clipboard.writeText(value);
+        copied = true;
+      } catch {
+        // 非安全上下文下浏览器可能拒绝剪贴板写入。
+      }
+
+      const hint = target.querySelector("em");
+      if (!hint) return;
+      const original = hint.dataset.originalText || hint.textContent || "";
+      hint.dataset.originalText = original;
+      hint.textContent = copied ? "已复制" : "复制失败";
+      window.setTimeout(() => {
+        hint.textContent = original;
+      }, 1600);
+    };
+
+    document.addEventListener("click", handleViewClick, true);
+    document.addEventListener("click", (event) => {
+      void handleCopyClick(event);
+    });
+    window.addEventListener("hashchange", syncFromLocation);
+    window.addEventListener("popstate", syncFromLocation);
+    for (const eventName of [
+      "astro:page-load",
+      "astro:after-swap",
+      "swup:content:replace",
+      "swup:page:view",
+    ]) {
+      document.addEventListener(eventName, syncFromLocation);
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", syncFromLocation, {
+        once: true,
+      });
+    } else {
+      syncFromLocation();
+    }
   })();
 </script>
