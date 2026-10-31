@@ -1,7 +1,7 @@
 <div align="center">
   <h1>鸡腿的作品集</h1>
   <p><strong>独立游戏开发者，爱好 vibecoding 小游戏。</strong></p>
-  <p>基于 Aemeath 主题二次创作的个人作品集，Astro 静态构建，托管在 GitHub Pages。</p>
+  <p>个人作品集，Astro 静态构建，托管在 GitHub Pages。</p>
   <p>
     <a href="https://jituihaochi001-arch.github.io/">访问站点</a> ·
     <a href="https://github.com/jituihaochi001-arch/jituihaochi001-arch.github.io">GitHub 仓库</a> ·
@@ -9,7 +9,7 @@
   </p>
   <p>
     <a href="https://astro.build/"><img src="https://img.shields.io/badge/Astro-7-BC52EE?logo=astro&logoColor=white" alt="Astro 7"></a>
-    <img src="https://img.shields.io/badge/Aemeath-V4.3.0-4A67D6" alt="Aemeath V4.3.0">
+    <img src="https://img.shields.io/badge/tasty-chicken-4A67D6" alt="tasty-chicken">
     <a href="https://svelte.dev/"><img src="https://img.shields.io/badge/Svelte-UI-FF3E00?logo=svelte&logoColor=white" alt="Svelte UI"></a>
     <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript">
     <img src="https://img.shields.io/badge/Node.js-%3E%3D22.12-339933?logo=node.js&logoColor=white" alt="Node.js 22.12+">
@@ -158,7 +158,7 @@ docs/
 
 ## 二次创作与致谢
 
-这个站点不是从零写的。它基于 [Jarvis0227 / Aemeath](https://github.com/Jarvis0227/Aemeath) 二次创作，而 Aemeath 又脱胎于 [CuteLeaf / Firefly](https://github.com/CuteLeaf/Firefly) 与 [saicaca / Fuwari](https://github.com/saicaca/fuwari)。页面的结构、组件和大部分样式都来自这几位作者，这里一并致谢。
+这个站点不是从零写的。它的布局与组件脱胎于 [CuteLeaf / Firefly](https://github.com/CuteLeaf/Firefly) 与 [saicaca / Fuwari](https://github.com/saicaca/fuwari)，页面的结构、组件和大部分样式都来自这几位作者，这里一并致谢。
 
 在本站里由我调整过的部分：
 

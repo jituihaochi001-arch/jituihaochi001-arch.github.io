@@ -6,8 +6,8 @@ const MAX_PARTICLES = 260;
 const TRAIL_STEP = 10;
 
 (() => {
-	if (window.__aemeathClickParticles) return;
-	window.__aemeathClickParticles = true;
+	if (window.__tastyChickenClickParticles) return;
+	window.__tastyChickenClickParticles = true;
 
 	const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 	if (reducedMotion.matches) return;

@@ -53,9 +53,9 @@ export async function GET(context: APIContext): Promise<Response> {
 		title: siteConfig.title,
 		description: siteConfig.subtitle || "No description",
 		site: context.site ?? "https://example.com",
-		customData: `<templateTheme>Aemeath</templateTheme>
+		customData: `<templateTheme>tasty-chicken</templateTheme>
 		<templateThemeVersion>${pkg.version}</templateThemeVersion>
-		<templateThemeUrl>https://github.com/Jarvis0227/Aemeath</templateThemeUrl>
+		<templateThemeUrl>https://github.com/jituihaochi001-arch/jituihaochi001-arch.github.io</templateThemeUrl>
 		<lastBuildDate>${new Date().toUTCString()}</lastBuildDate>`,
 		items: feedItems,
 	});

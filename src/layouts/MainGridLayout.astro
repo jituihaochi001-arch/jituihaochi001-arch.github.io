@@ -386,7 +386,7 @@ const hasMultipleImages =
 	})();
 </script>
 
-<div id="aemeath-shell">
+<div id="tasty-chicken-shell">
 
 <!-- 为全屏壁纸模式添加body类 -->
 {shouldEnableTransparency && (
@@ -524,7 +524,7 @@ const hasMultipleImages =
     <!-- 壁纸轮播脚本（基于 CSS transition） -->
     {hasMultipleImages && (
     <script>
-	if (document.documentElement.dataset.siteTheme === "aemeath") {
+	if (document.documentElement.dataset.siteTheme === "tasty-chicken") {
 		void import("@/scripts/wallpaper-carousel");
 	}
 </script>
@@ -796,10 +796,10 @@ const hasMultipleImages =
                 {/* 携带网格布局类名，用于JS更新父容器 */}
                 <div id="grid-class-carrier" data-grid-class={gridCols} class="hidden"></div>
                 {/* 为每个页面提供一个隐藏的h1标题，用于SEO和可访问性 */}
-                <h1 class="sr-only" data-theme-only="aemeath">{title || siteConfig.title}</h1>
+                <h1 class="sr-only" data-theme-only="tasty-chicken">{title || siteConfig.title}</h1>
                 <div id="content-wrapper" class="onload-animation transition-leaving">
                     {showPostAiSummary && (
-                        <div class="post-ai-summary-shell" data-theme-only="aemeath">
+                        <div class="post-ai-summary-shell" data-theme-only="tasty-chicken">
                             <div class="banner-post-ai-summary post-ai-summary-inline mobile-post-ai-summary" role="note" aria-label="AI摘要，由 ChatGPT Sol 5.6 Max 提供">
                                 <div class="banner-post-ai-summary__label">
                                     <Icon is:inline name="material-symbols:auto-awesome-rounded" class="text-[1.05em]" />

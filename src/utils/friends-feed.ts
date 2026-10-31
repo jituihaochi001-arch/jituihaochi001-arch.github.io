@@ -304,7 +304,7 @@ async function fetchText(
 				headers: {
 					Accept: accept,
 					"Cache-Control": "no-cache",
-					"User-Agent": `Aemeath-Moments/1.1 (+${siteConfig.site_url}/)`,
+					"User-Agent": `tasty-chicken-Moments/1.1 (+${siteConfig.site_url}/)`,
 				},
 			});
 			if (response.ok) {

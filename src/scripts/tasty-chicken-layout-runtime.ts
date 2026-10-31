@@ -1390,12 +1390,12 @@ let ambientScrollIdleTimer = 0;
 window.addEventListener(
 	"scroll",
 	() => {
-		if (document.documentElement.dataset.siteTheme === "aemeath") {
+		if (document.documentElement.dataset.siteTheme === "tasty-chicken") {
 			const root = document.documentElement;
-			root.classList.add("is-aemeath-scrolling");
+			root.classList.add("is-tasty-chicken-scrolling");
 			window.clearTimeout(ambientScrollIdleTimer);
 			ambientScrollIdleTimer = window.setTimeout(() => {
-				root.classList.remove("is-aemeath-scrolling");
+				root.classList.remove("is-tasty-chicken-scrolling");
 				ambientScrollIdleTimer = 0;
 			}, 180);
 		}

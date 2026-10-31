@@ -1,7 +1,7 @@
 export {};
 
 const configPayload = JSON.parse(
-	document.getElementById("aemeath-falling-effect-config")?.textContent || "{}",
+	document.getElementById("tasty-chicken-falling-effect-config")?.textContent || "{}",
 );
 const {
 	fallingEffectConfig,
@@ -557,10 +557,10 @@ window.addEventListener("fallingEffectChange", () => {
 window.addEventListener(
 	"scroll",
 	() => {
-		document.documentElement.classList.add("is-aemeath-scrolling");
+		document.documentElement.classList.add("is-tasty-chicken-scrolling");
 		window.clearTimeout(scrollResumeTimer);
 		scrollResumeTimer = window.setTimeout(() => {
-			document.documentElement.classList.remove("is-aemeath-scrolling");
+			document.documentElement.classList.remove("is-tasty-chicken-scrolling");
 		}, 180);
 	},
 	{ passive: true },
@@ -569,7 +569,7 @@ window.addEventListener(
 document.addEventListener("visibilitychange", () => {
 	if (document.visibilityState === "hidden") {
 		window.clearTimeout(scrollResumeTimer);
-		document.documentElement.classList.remove("is-aemeath-scrolling");
+		document.documentElement.classList.remove("is-tasty-chicken-scrolling");
 		window.fallingEffectManager?.pause?.();
 	} else {
 		queueFallingEffectSync();

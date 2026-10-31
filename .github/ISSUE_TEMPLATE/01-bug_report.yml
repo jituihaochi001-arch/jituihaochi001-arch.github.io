@@ -3,7 +3,7 @@ description: Create a report to help us improve
 title: "[Bug]: "
 labels: ["bug"]
 assignees:
-  - Jarvis0227
+  - jituihaochi001-arch
 body:
   - type: markdown
     attributes:

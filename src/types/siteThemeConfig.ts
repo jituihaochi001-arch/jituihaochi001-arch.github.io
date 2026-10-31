@@ -1,4 +1,4 @@
-export type SiteTheme = "aemeath" | "pure";
+export type SiteTheme = "tasty-chicken" | "pure";
 
 export interface SiteThemeConfig {
 	enabled: boolean;

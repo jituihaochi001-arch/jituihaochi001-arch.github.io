@@ -1,7 +1,7 @@
 <div align="center">
   <h1>Jitui's Portfolio</h1>
   <p><strong>Indie game developer who loves vibecoding small games.</strong></p>
-  <p>A personal portfolio remixed from the Aemeath theme, statically built with Astro and hosted on GitHub Pages.</p>
+  <p>A personal portfolio, statically built with Astro and hosted on GitHub Pages.</p>
   <p>
     <a href="https://jituihaochi001-arch.github.io/">Live site</a> ·
     <a href="https://github.com/jituihaochi001-arch/jituihaochi001-arch.github.io">Repository</a> ·
@@ -9,7 +9,7 @@
   </p>
   <p>
     <a href="https://astro.build/"><img src="https://img.shields.io/badge/Astro-7-BC52EE?logo=astro&logoColor=white" alt="Astro 7"></a>
-    <img src="https://img.shields.io/badge/Aemeath-V4.3.0-4A67D6" alt="Aemeath V4.3.0">
+    <img src="https://img.shields.io/badge/tasty-chicken-4A67D6" alt="tasty-chicken">
     <a href="https://svelte.dev/"><img src="https://img.shields.io/badge/Svelte-UI-FF3E00?logo=svelte&logoColor=white" alt="Svelte UI"></a>
     <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript">
     <img src="https://img.shields.io/badge/Node.js-%3E%3D22.12-339933?logo=node.js&logoColor=white" alt="Node.js 22.12+">
@@ -156,7 +156,7 @@ docs/
 
 ## Credits
 
-This site is not written from scratch. It is a remix of [Jarvis0227 / Aemeath](https://github.com/Jarvis0227/Aemeath), which in turn descends from [CuteLeaf / Firefly](https://github.com/CuteLeaf/Firefly) and [saicaca / Fuwari](https://github.com/saicaca/fuwari). The layout, components and most styles come from those authors — many thanks to them.
+This site is not written from scratch. Its layout and components descend from [CuteLeaf / Firefly](https://github.com/CuteLeaf/Firefly) and [saicaca / Fuwari](https://github.com/saicaca/fuwari); the structure, components and most styles come from those authors — many thanks to them.
 
 What I changed here:
 

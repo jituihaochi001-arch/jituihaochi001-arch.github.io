@@ -101,7 +101,7 @@ const footerSeconds = footerElapsedSeconds % 60;
 			<p class="pure-footer__copyright">
 				<span>© {footerCurrentYear} {profileConfig.name}</span>
 				<span class="pure-footer__separator" aria-hidden="true">·</span>
-				<span>Aemeath</span>
+				<span>tasty-chicken</span>
 			</p>
 			<time class="pure-footer__runtime" data-runtime datetime={siteConfig.siteStartDate}>
 				本站已萌萌哒 <strong>{footerDays}</strong> 天 <strong>{footerHours}</strong> 小时 <strong>{footerMinutes}</strong> 分 <strong>{footerSeconds}</strong> 秒
@@ -124,7 +124,7 @@ const footerSeconds = footerElapsedSeconds % 60;
 		const mount = document.getElementById("pure-content");
 		if (content && mount) {
 			mount.append(content);
-			document.getElementById("aemeath-shell")?.setAttribute("inert", "");
+			document.getElementById("tasty-chicken-shell")?.setAttribute("inert", "");
 		}
 		if (document.documentElement.dataset.pureHeaderFrom) {
 			document.querySelector(".pure-header")?.classList.toggle("is-scrolled", document.documentElement.dataset.pureHeaderFrom === "floating");

@@ -12,7 +12,7 @@ interface Props {
 const { id, showFonts = false, inline = false, navigation = false } = Astro.props;
 const label = inline && showFonts ? "主题与字体" : "主题";
 const choices = [
-	{ value: "aemeath", name: "默认", detail: "壁纸 · 卡片 · 侧栏" },
+	{ value: "tasty-chicken", name: "默认", detail: "壁纸 · 卡片 · 侧栏" },
 	{ value: "pure", name: "Pure", detail: "简洁导航 · 专注阅读" },
 ];
 ---
@@ -74,7 +74,7 @@ const choices = [
 		if (!(target instanceof Element)) return;
 		const button = target.closest<HTMLButtonElement>("[data-site-theme-choice]");
 		const choice = button?.dataset.siteThemeChoice;
-		if (choice === "aemeath" || choice === "pure") chooseTheme(choice);
+		if (choice === "tasty-chicken" || choice === "pure") chooseTheme(choice);
 		document.querySelectorAll<HTMLDetailsElement>(".site-theme-switch[open]").forEach((panel) => {
 			if (!panel.contains(target) || button) panel.open = false;
 		});
@@ -93,7 +93,7 @@ const choices = [
 		if (event.persisted && siteThemeConfig.enabled && !new URLSearchParams(location.search).has("siteTheme")) {
 			try {
 				const saved = localStorage.getItem("rainzt.site-theme.v1");
-				if ((saved === "pure" || saved === "aemeath") && saved !== document.documentElement.dataset.siteTheme) {
+				if ((saved === "pure" || saved === "tasty-chicken") && saved !== document.documentElement.dataset.siteTheme) {
 					location.reload();
 					return;
 				}

@@ -15,7 +15,7 @@ const {
 <script is:inline define:vars={{ siteThemeConfig, pureStylesheets }}>
 	(() => {
 		const root = document.documentElement;
-		const valid = (value) => value === "aemeath" || value === "pure";
+		const valid = (value) => value === "tasty-chicken" || value === "pure";
 		const requested = new URLSearchParams(window.location.search).get("siteTheme");
 		let saved;
 		try {
@@ -27,8 +27,15 @@ const {
 		}
 		const selected = siteThemeConfig.enabled
 			? (valid(requested) ? requested : valid(saved) ? saved : siteThemeConfig.defaultTheme)
-			: "aemeath";
+			: "tasty-chicken";
 		root.dataset.siteTheme = selected;
+		if (saved && !valid(saved)) {
+			try {
+				localStorage.setItem("rainzt.site-theme.v1", selected);
+			} catch {
+				// Storage stayed blocked; the selected theme still applies to this page.
+			}
+		}
 		if (selected !== "pure") {
 			document.querySelector('[name="astro-view-transitions-enabled"]')?.remove();
 			document.querySelector('[name="astro-view-transitions-fallback"]')?.remove();

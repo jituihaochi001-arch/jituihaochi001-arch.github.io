@@ -138,12 +138,12 @@ if (isLocalSrcLogo) {
                 {links.map((l) => {
                     return <DropdownMenu link={l} />;
                 })}
-                <ThemeSwitch id="aemeath-theme-switch" navigation />
+                <ThemeSwitch id="tasty-chicken-theme-switch" navigation />
             </div>
             <div class="nav-actions flex items-center gap-1 col-start-3 justify-self-end min-w-0">
                 <!--<SearchPanel client:load>-->
                 <Search
-                    client:theme="aemeath"
+                    client:theme="tasty-chicken"
                 />
                 {musicPlayerConfig.showInNavbar && (
                     <button aria-label={i18n(I18nKey.music)} class="theme-btn btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90" id="music-player-switch">
@@ -165,7 +165,7 @@ if (isLocalSrcLogo) {
                     <Icon is:inline name="material-symbols:palette-outline" class="text-[1.25rem]"></Icon>
                 </button>
                 {/* @ts-ignore */}
-                <LightDarkSwitch client:theme="aemeath"></LightDarkSwitch>
+                <LightDarkSwitch client:theme="tasty-chicken"></LightDarkSwitch>
                 <button aria-label="Menu" aria-controls="nav-menu-panel" aria-expanded="false" name="Nav Menu" class="menu-btn btn-plain scale-animation rounded-lg w-11 h-11 active:scale-90" id="nav-menu-switch">
                     <span></span>
                     <span></span>
@@ -178,7 +178,7 @@ if (isLocalSrcLogo) {
                 <MusicPlayer />
             </div>
         )}
-        <DisplaySettings client:theme={{ theme: "aemeath", trigger: "#display-settings-switch" }}></DisplaySettings>
+        <DisplaySettings client:theme={{ theme: "tasty-chicken", trigger: "#display-settings-switch" }}></DisplaySettings>
     </div>
     <!-- Keep the drawer outside the glass shell: backdrop-filter creates a
          containing block for fixed descendants on mobile. -->
@@ -186,8 +186,8 @@ if (isLocalSrcLogo) {
 </div>
 
 <script>
-	if (document.documentElement.dataset.siteTheme === "aemeath") {
-		void import("@/scripts/aemeath-navbar");
+	if (document.documentElement.dataset.siteTheme === "tasty-chicken") {
+		void import("@/scripts/tasty-chicken-navbar");
 	}
 	void import("@/scripts/music-panel-drag");
 </script>
