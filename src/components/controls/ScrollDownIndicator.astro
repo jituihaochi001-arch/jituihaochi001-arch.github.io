@@ -5,7 +5,9 @@ import { Icon } from "astro-icon/components";
 <div
   id="scroll-down-indicator"
   class="scroll-down-indicator"
-  onclick="document.getElementById('main-grid')?.scrollIntoView({ behavior: 'smooth' })"
+  role="button"
+  tabindex="0"
+  aria-label="下滑查看作品"
 >
   <Icon is:inline name="material-symbols:keyboard-arrow-down-rounded" class="scroll-down-icon" />
 </div>
@@ -18,6 +20,7 @@ import { Icon } from "astro-icon/components";
 
     var indicator = document.getElementById("scroll-down-indicator");
     var lastHidden = null;
+    var lastHomeSection = null;
 
     function updateVisibility() {
       if (!indicator) return;
@@ -28,15 +31,90 @@ import { Icon } from "astro-icon/components";
       indicator.classList.toggle("hide", hidden);
     }
 
+    function isHomePath() {
+      var path = window.location.pathname.replace(/index\.html$/, "");
+      return path === "/" || path === "";
+    }
+
+    // 首页首屏下滑到作品列表后，顶部导航同步切换到「作品」标签
+    function syncHomeSection() {
+      if (!isHomePath()) {
+        lastHomeSection = null;
+        return;
+      }
+      var grid = document.getElementById("main-grid");
+      if (!grid) return;
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      var navbar = document.getElementById("navbar");
+      var threshold = (navbar ? navbar.getBoundingClientRect().height : 72) + 32;
+      var inWorks = scrollTop > 0 && grid.getBoundingClientRect().top <= threshold;
+      if (inWorks === lastHomeSection) return;
+      lastHomeSection = inWorks;
+      var syncNav = window.__fireflySyncNavbarActiveState;
+      if (typeof syncNav === "function") syncNav(inWorks ? "/archive/" : "/");
+    }
+
+    function onScroll() {
+      updateVisibility();
+      syncHomeSection();
+    }
+
+    function scrollToWorks() {
+      var grid = document.getElementById("main-grid");
+      if (!grid) return;
+      grid.scrollIntoView({ behavior: "smooth", block: "start" });
+      // 平滑滚动结束后按实际位置校准激活状态
+      window.setTimeout(syncHomeSection, 500);
+      window.setTimeout(syncHomeSection, 900);
+    }
+
     function refreshIndicator() {
       indicator = document.getElementById("scroll-down-indicator");
       lastHidden = null;
+      lastHomeSection = null;
       updateVisibility();
+      syncHomeSection();
     }
 
-    window.addEventListener("scroll", updateVisibility, { passive: true });
-    document.addEventListener("swup:contentReplaced", refreshIndicator);
-    document.addEventListener("astro:after-swap", refreshIndicator);
+    var refreshTimer;
+    var lateRefreshTimer;
+    function scheduleRefresh() {
+      window.clearTimeout(refreshTimer);
+      window.clearTimeout(lateRefreshTimer);
+      refreshTimer = window.setTimeout(refreshIndicator, 120);
+      // 路由过渡结束后布局才稳定，再校准一次
+      lateRefreshTimer = window.setTimeout(refreshIndicator, 650);
+    }
+
+    document.addEventListener("click", function (event) {
+      var target = event.target;
+      if (!(target instanceof Element)) return;
+      if (!target.closest("#scroll-down-indicator")) return;
+      scrollToWorks();
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      var target = event.target;
+      if (!(target instanceof Element)) return;
+      if (!target.closest("#scroll-down-indicator")) return;
+      event.preventDefault();
+      scrollToWorks();
+    });
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    document.addEventListener("swup:contentReplaced", scheduleRefresh);
+    document.addEventListener("astro:after-swap", scheduleRefresh);
+    document.addEventListener("swup:page:view", scheduleRefresh);
+    document.addEventListener("astro:page-load", scheduleRefresh);
     updateVisibility();
   })();
 </script>
+
+<style>
+  #scroll-down-indicator:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.85);
+    outline-offset: 6px;
+    border-radius: 9999px;
+  }
+</style>

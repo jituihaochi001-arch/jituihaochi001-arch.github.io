@@ -610,6 +610,11 @@ document.addEventListener(
 	syncNavbarActiveStateFromLocation,
 );
 
+// 首页滚动到作品列表时，由 ScrollDownIndicator 传入虚拟路径切换高亮
+(window as Window & {
+	__fireflySyncNavbarActiveState?: (pathname?: string) => void;
+}).__fireflySyncNavbarActiveState = syncNavbarActiveState;
+
 let navbarSwupHooksBound = false;
 function bindNavbarSwupHooks() {
 	if (navbarSwupHooksBound || !window.swup?.hooks) return;
