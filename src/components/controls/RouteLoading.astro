@@ -166,38 +166,38 @@
     stroke-linecap: round;
     transform-box: fill-box;
     transform-origin: 0% 4%;
-    animation: route-loading-tail 1.7s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    animation: route-loading-tail 0.8s ease-in-out infinite;
   }
 
   .cat-bob {
     transform-box: fill-box;
     transform-origin: 50% 88%;
-    animation: route-loading-bob 2.4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    animation: route-loading-bob 1.9s cubic-bezier(0.37, 0, 0.63, 1) infinite;
   }
 
   .cat-eye {
     transform-box: fill-box;
     transform-origin: 50% 50%;
-    animation: route-loading-blink 4.6s ease-in-out infinite;
+    animation: route-loading-blink 3.6s ease-in-out infinite;
   }
 
   .cat-ear--left {
     transform-box: fill-box;
     transform-origin: 80% 100%;
-    animation: route-loading-ear-left 5.4s ease-in-out infinite;
+    animation: route-loading-ear-left 1.9s cubic-bezier(0.37, 0, 0.63, 1) infinite;
   }
 
   .cat-ear--right {
     transform-box: fill-box;
     transform-origin: 20% 100%;
-    animation: route-loading-ear-right 5.4s ease-in-out infinite;
+    animation: route-loading-ear-right 1.9s cubic-bezier(0.37, 0, 0.63, 1) infinite;
   }
 
   .cat-shadow {
     fill: color-mix(in oklab, var(--text-color) 14%, transparent);
     transform-box: fill-box;
     transform-origin: 50% 50%;
-    animation: route-loading-shadow 2.4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    animation: route-loading-shadow 1.9s cubic-bezier(0.37, 0, 0.63, 1) infinite;
   }
 
   .route-loading-text {
@@ -206,7 +206,7 @@
     letter-spacing: 0.34em;
     text-transform: lowercase;
     color: color-mix(in oklab, var(--text-color) 46%, transparent);
-    animation: route-loading-text-pulse 2.4s ease-in-out infinite;
+    animation: route-loading-text-pulse 1.9s ease-in-out infinite;
   }
 
   .route-loading-bar {
@@ -225,7 +225,7 @@
     width: 38%;
     border-radius: inherit;
     background: color-mix(in oklab, var(--text-color) 80%, transparent);
-    animation: route-loading-slide 1.15s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    animation: route-loading-slide 0.95s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   }
 
   .route-loading-overlay:not(.is-active)
@@ -236,79 +236,133 @@
   @keyframes route-loading-bob {
     0%,
     100% {
-      transform: translateY(0) scale(1, 1);
+      transform: translateY(0) rotate(-3deg) scale(1.1, 0.88);
+    }
+    10% {
+      transform: translateY(0) rotate(0deg) scale(1.02, 1);
+    }
+    36% {
+      transform: translateY(-24px) rotate(5deg) scale(0.94, 1.08);
     }
     50% {
-      transform: translateY(-6px) scale(1.02, 0.98);
+      transform: translateY(-24px) rotate(-5deg) scale(0.97, 1.05);
+    }
+    72% {
+      transform: translateY(0) rotate(0deg) scale(1.12, 0.86);
+    }
+    82% {
+      transform: translateY(-5px) rotate(3deg) scale(0.99, 1.03);
+    }
+    92% {
+      transform: translateY(0) rotate(-1.5deg) scale(1.04, 0.95);
     }
   }
 
   @keyframes route-loading-tail {
     0%,
     100% {
-      transform: rotate(-7deg);
+      transform: rotate(-24deg);
     }
     50% {
-      transform: rotate(9deg);
+      transform: rotate(28deg);
     }
   }
 
   @keyframes route-loading-blink {
     0%,
-    87%,
+    83%,
+    91%,
     95%,
     100% {
       transform: scaleY(1);
     }
-    90%,
-    92% {
-      transform: scaleY(0.1);
+    85%,
+    87% {
+      transform: scaleY(0.06);
+    }
+    92.5% {
+      transform: scaleY(0.06);
     }
   }
 
   @keyframes route-loading-ear-left {
     0%,
-    88%,
-    94%,
     100% {
       transform: rotate(0deg);
     }
-    91% {
-      transform: rotate(-7deg);
+    36% {
+      transform: rotate(-17deg);
+    }
+    50% {
+      transform: rotate(11deg);
+    }
+    72% {
+      transform: rotate(-9deg);
+    }
+    82% {
+      transform: rotate(4deg);
     }
   }
 
   @keyframes route-loading-ear-right {
     0%,
-    88%,
-    94%,
     100% {
       transform: rotate(0deg);
     }
-    91% {
-      transform: rotate(7deg);
+    36% {
+      transform: rotate(17deg);
+    }
+    50% {
+      transform: rotate(-11deg);
+    }
+    72% {
+      transform: rotate(9deg);
+    }
+    82% {
+      transform: rotate(-4deg);
     }
   }
 
   @keyframes route-loading-shadow {
     0%,
     100% {
+      transform: scale(1.08);
+      opacity: 0.95;
+    }
+    10% {
       transform: scale(1);
+      opacity: 0.9;
+    }
+    36%,
+    50% {
+      transform: scale(0.5);
+      opacity: 0.25;
+    }
+    72% {
+      transform: scale(1.18);
       opacity: 1;
     }
-    50% {
-      transform: scale(0.86);
-      opacity: 0.6;
+    82% {
+      transform: scale(0.94);
+      opacity: 0.75;
     }
   }
 
   @keyframes route-loading-text-pulse {
     0%,
+    10%,
     100% {
       opacity: 1;
+      transform: translateY(0);
     }
+    36%,
     50% {
+      opacity: 0.4;
+      transform: translateY(-2px);
+    }
+    72% {
       opacity: 0.55;
+      transform: translateY(2px);
     }
   }
 
