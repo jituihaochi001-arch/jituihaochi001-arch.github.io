@@ -11,6 +11,7 @@ import WallpaperBootstrap from "@components/features/WallpaperBootstrap.astro";
 import WalineManager from "@components/features/WalineManager.astro";
 import WelcomeToast from "@components/features/WelcomeToast.astro";
 import ConfigCarrier from "@components/layout/ConfigCarrier.astro";
+import RouteLoading from "@components/controls/RouteLoading.astro";
 import ThemeBootstrap from "@/components/themes/ThemeBootstrap.astro";
 
 import {
@@ -643,6 +644,7 @@ const canonicalUrl = new URL(
     <MusicManager />
     <slot />
     <div id="route-white-screen" aria-hidden="true"></div>
+    <RouteLoading />
 
 
 

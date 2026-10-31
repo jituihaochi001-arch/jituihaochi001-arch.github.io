@@ -1,0 +1,240 @@
+---
+// Swup 切页间隙的小猫加载层：延迟出现、最短展示、结束淡出。
+---
+
+<div id="route-loading-overlay" class="route-loading-overlay" aria-hidden="true">
+  <div class="route-loading-card">
+    <svg class="route-loading-cat" viewBox="0 0 96 88" aria-hidden="true" focusable="false">
+      <path class="cat-ink" d="M24 34 L19 12 Q18 9 21.5 10 L41 24 Z" />
+      <path class="cat-ink" d="M72 34 L77 12 Q78 9 74.5 10 L55 24 Z" />
+      <path class="cat-ink" d="M48 24 C64 24 78 34 78 50 C78 66 65 76 48 76 C31 76 18 66 18 50 C18 34 32 24 48 24 Z" />
+      <rect class="cat-cut" x="35" y="42" width="6.5" height="11" rx="3.25" />
+      <rect class="cat-cut" x="54.5" y="42" width="6.5" height="11" rx="3.25" />
+      <path class="cat-smile" d="M43 60 Q48 65 53 60" />
+      <path class="cat-tail" d="M78 62 Q92 64 88 76 Q86 82 79 81" />
+    </svg>
+    <span class="route-loading-text">loading</span>
+    <span class="route-loading-bar"><i></i></span>
+  </div>
+</div>
+
+<script is:inline data-swup-ignore-script>
+  (() => {
+    const overlay = document.getElementById("route-loading-overlay");
+    if (!overlay) return;
+
+    const SHOW_DELAY = 140;
+    const MIN_VISIBLE = 240;
+    const MAX_VISIBLE = 8000;
+
+    const runtime = (window.__routeLoadingRuntime ||= {
+      showTimer: 0,
+      hideTimer: 0,
+      maxTimer: 0,
+      shownAt: 0,
+      active: false,
+      bound: false,
+      overlay: null,
+    });
+    runtime.overlay = overlay;
+    if (runtime.active) overlay.classList.add("is-active");
+
+    const show = () => {
+      window.clearTimeout(runtime.showTimer);
+      runtime.showTimer = 0;
+      if (runtime.active) return;
+      runtime.active = true;
+      runtime.shownAt = performance.now();
+      overlay.classList.add("is-active");
+      window.clearTimeout(runtime.maxTimer);
+      runtime.maxTimer = window.setTimeout(hide, MAX_VISIBLE);
+    };
+
+    function hide() {
+      window.clearTimeout(runtime.showTimer);
+      window.clearTimeout(runtime.maxTimer);
+      runtime.showTimer = 0;
+      if (!runtime.active) {
+        overlay.classList.remove("is-active");
+        return;
+      }
+      const remaining = MIN_VISIBLE - (performance.now() - runtime.shownAt);
+      window.clearTimeout(runtime.hideTimer);
+      const finish = () => {
+        runtime.active = false;
+        overlay.classList.remove("is-active");
+      };
+      if (remaining > 0) runtime.hideTimer = window.setTimeout(finish, remaining);
+      else finish();
+    }
+
+    function onVisitStart() {
+      window.clearTimeout(runtime.showTimer);
+      runtime.showTimer = window.setTimeout(show, SHOW_DELAY);
+    }
+
+    runtime.show = show;
+    runtime.hide = hide;
+
+    if (!runtime.bound) {
+      runtime.bound = true;
+      const bindHooks = () => {
+        if (!window.swup?.hooks) return false;
+        window.swup.hooks.on("visit:start", onVisitStart);
+        window.swup.hooks.on("visit:end", hide);
+        window.swup.hooks.on("visit:abort", hide);
+        return true;
+      };
+      if (!bindHooks()) {
+        document.addEventListener("swup:enable", bindHooks, { once: true });
+      }
+      document.addEventListener("swup:page:view", hide);
+      document.addEventListener("astro:page-load", hide);
+    }
+  })();
+</script>
+
+<style>
+  .route-loading-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1002;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--page-bg);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 160ms ease,
+      visibility 0s linear 160ms;
+  }
+
+  .route-loading-overlay.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition:
+      opacity 140ms ease,
+      visibility 0s;
+  }
+
+  .route-loading-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 26px 34px 24px;
+    border-radius: 26px;
+    background: var(--card-bg);
+    border: 1px solid color-mix(in oklab, var(--text-color) 7%, transparent);
+    box-shadow: 0 16px 40px color-mix(in oklab, var(--text-color) 8%, transparent);
+    transform: translateY(6px) scale(0.97);
+    transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .route-loading-overlay.is-active .route-loading-card {
+    transform: none;
+  }
+
+  .route-loading-cat {
+    width: 62px;
+    height: auto;
+    animation: route-loading-bob 1.8s ease-in-out infinite;
+  }
+
+  .cat-ink {
+    fill: color-mix(in oklab, var(--text-color) 80%, transparent);
+  }
+
+  .cat-cut {
+    fill: var(--card-bg);
+  }
+
+  .cat-smile {
+    fill: none;
+    stroke: var(--card-bg);
+    stroke-width: 2.6;
+    stroke-linecap: round;
+  }
+
+  .cat-tail {
+    fill: none;
+    stroke: color-mix(in oklab, var(--text-color) 80%, transparent);
+    stroke-width: 6.5;
+    stroke-linecap: round;
+  }
+
+  .route-loading-text {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: lowercase;
+    color: color-mix(in oklab, var(--text-color) 50%, transparent);
+  }
+
+  .route-loading-bar {
+    position: relative;
+    display: block;
+    width: 92px;
+    height: 8px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: color-mix(in oklab, var(--text-color) 9%, transparent);
+  }
+
+  .route-loading-bar i {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 38%;
+    border-radius: inherit;
+    background: color-mix(in oklab, var(--text-color) 78%, transparent);
+    animation: route-loading-slide 1.15s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+
+  .route-loading-overlay:not(.is-active) :is(.route-loading-cat, .route-loading-bar i) {
+    animation-play-state: paused;
+  }
+
+  @keyframes route-loading-bob {
+    0%,
+    100% {
+      transform: translateY(0) rotate(-2deg);
+    }
+    50% {
+      transform: translateY(-4px) rotate(2deg);
+    }
+  }
+
+  @keyframes route-loading-slide {
+    0% {
+      transform: translateX(-110%);
+    }
+    100% {
+      transform: translateX(260%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .route-loading-overlay,
+    .route-loading-overlay.is-active {
+      transition: none;
+    }
+
+    .route-loading-card,
+    .route-loading-overlay.is-active .route-loading-card {
+      transform: none;
+      transition: none;
+    }
+
+    .route-loading-cat,
+    .route-loading-bar i {
+      animation: none;
+    }
+
+    .route-loading-bar i {
+      width: 60%;
+    }
+  }
+</style>
