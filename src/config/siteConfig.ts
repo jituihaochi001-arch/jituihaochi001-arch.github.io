@@ -14,9 +14,6 @@ export const siteConfig: SiteConfig = {
 	// 站点副标题
 	subtitle: "独立游戏开发 · 系统策划",
 
-	// Aemeath 主题版本
-	themeVersion: "V4.3.0",
-
 	// 站点 URL
 	site_url: envSiteUrl || "https://tasty-chicken-tbw90iaqa7y.qoder.zone",
 
