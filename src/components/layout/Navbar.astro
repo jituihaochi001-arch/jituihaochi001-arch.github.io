@@ -189,4 +189,28 @@ if (isLocalSrcLogo) {
 	if (document.documentElement.dataset.siteTheme === "aemeath") {
 		void import("@/scripts/aemeath-navbar");
 	}
+	void import("@/scripts/music-panel-drag");
 </script>
+
+<style>
+	#music-nav-panel {
+		cursor: grab;
+	}
+
+	#music-nav-panel.is-dragging {
+		cursor: grabbing;
+	}
+
+	#music-nav-panel :global(.lrc-container),
+	#music-nav-panel :global(.playlist-container) {
+		cursor: auto;
+	}
+
+	#music-nav-panel.is-dragging :global(*) {
+		user-select: none;
+	}
+
+	:global(body.music-panel-dragging) {
+		user-select: none;
+	}
+</style>

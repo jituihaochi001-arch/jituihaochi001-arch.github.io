@@ -37,12 +37,12 @@ const widgetId =
 <div id={widgetId} class:list={["music-player-widget w-full relative transition-all duration-300", className]} style={style} role="region" aria-label={i18n(I18nKey.music)}>
 
     <!-- Top Row: Cover & Info -->
-<div class="flex items-center gap-2 mb-2 px-1">
+<div class="flex items-center gap-2 mb-2 px-1" data-music-drag-handle>
     <!-- Circular Cover -->
     <div class="relative shrink-0 w-14 h-14 group">
             <div class="w-full h-full rounded-full overflow-hidden shadow-lg border-2 border-white dark:border-neutral-700 relative z-10 bg-(--primary)/10 flex items-center justify-center">
             <Icon is:inline name="material-symbols:music-note-rounded" class="text-2xl text-(--primary) opacity-40 absolute" aria-hidden="true" />
-            <img class="music-cover w-full h-full object-cover animate-spin-slow relative z-10 opacity-0 transition-opacity duration-300" src="" alt={i18n(I18nKey.musicCover)} style="animation-play-state: paused;" />
+            <img class="music-cover w-full h-full object-cover animate-spin-slow relative z-10 opacity-0 transition-opacity duration-300" src="" alt={i18n(I18nKey.musicCover)} draggable="false" style="animation-play-state: paused;" />
             </div>
     </div>
 
