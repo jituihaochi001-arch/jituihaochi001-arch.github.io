@@ -1,0 +1,285 @@
+---
+// 小猫叠叠乐图形：全屏切页遮罩与中间内容列的局部加载共用。
+---
+
+<svg class="route-loading-cats" viewBox="0 0 320 180" aria-hidden="true" focusable="false">
+  <defs>
+    <clipPath id={`bar-clip-${Astro.uid}`}>
+      <rect x="6" y="150" width="308" height="14" rx="7" />
+    </clipPath>
+  </defs>
+
+  <!-- 后排大猫：眯着眼打盹 -->
+  <g class="cat-stack cat-stack--sleepy">
+    <g class="cat-rig cat-rig--sleepy">
+      <path class="cat-body" d="M125 48 C125 35 127 24 131 19 C134 15 140 17 143 23 C146 30 148 39 149 48 Z" />
+      <path class="cat-body" d="M175 48 C175 35 173 24 169 19 C166 15 160 17 157 23 C154 30 152 39 151 48 Z" />
+      <ellipse class="cat-body" cx="150" cy="80" rx="58" ry="45" />
+      <rect class="cat-eye-slit" x="120" y="74" width="22" height="9" rx="4.5" />
+      <rect class="cat-eye-slit" x="154" y="74" width="26" height="9" rx="4.5" />
+    </g>
+  </g>
+
+  <!-- 左侧歪头小猫：星星眼 -->
+  <g class="cat-stack cat-stack--left" transform="rotate(-8 66 128)">
+    <g class="cat-rig cat-rig--left">
+      <path class="cat-body" d="M43 110 C43 99 45 90 48 85 C50 82 55 83 57 88 C59 94 61 102 62 110 Z" />
+      <path class="cat-body" d="M89 110 C89 99 87 90 84 85 C82 82 77 83 75 88 C73 94 71 102 70 110 Z" />
+      <ellipse class="cat-body" cx="66" cy="128" rx="47" ry="31" />
+      <g transform="translate(48 128)"><path class="spark spark--3" d="M0 -8 C1.8 -2.4 3 -1.2 8 0 C3 1.2 1.8 2.4 0 8 C-1.8 2.4 -3 1.2 -8 0 C-3 -1.2 -1.8 -2.4 0 -8 Z" /></g>
+      <g transform="translate(84 128)"><path class="spark spark--4" d="M0 -8 C1.8 -2.4 3 -1.2 8 0 C3 1.2 1.8 2.4 0 8 C-1.8 2.4 -3 1.2 -8 0 C-3 -1.2 -1.8 -2.4 0 -8 Z" /></g>
+    </g>
+  </g>
+
+  <!-- 正前方圆眼睛小猫 -->
+  <g class="cat-stack cat-stack--front">
+    <g class="cat-rig cat-rig--front">
+      <path class="cat-body" d="M142 116 C142 105 144 97 147 92 C150 88 155 90 157 95 C160 101 162 108 163 116 Z" />
+      <path class="cat-body" d="M186 116 C186 105 184 97 181 92 C178 88 173 90 171 95 C168 101 166 108 165 116 Z" />
+      <ellipse class="cat-body" cx="164" cy="133" rx="52" ry="31" />
+      <rect class="cat-eye-dot" x="146" y="124" width="11" height="16" rx="5.5" />
+      <rect class="cat-eye-dot" x="172" y="124" width="11" height="16" rx="5.5" />
+    </g>
+  </g>
+
+  <!-- 右侧：倒着靠过来的星星眼小猫 -->
+  <path class="cat-tail cat-tail--right" d="M295 82 C309 74 316 58 305 49 C297 43 289 50 294 58" />
+  <g class="cat-stack cat-stack--right" transform="translate(0 -8) rotate(-100 268 114)">
+    <g class="cat-rig cat-rig--right">
+      <path class="cat-body" d="M250 90 C250 80 252 70 254 65 C255 62 259 63 261 68 C263 75 265 84 266 90 Z" />
+      <path class="cat-body" d="M286 90 C286 80 284 70 282 65 C281 62 277 63 275 68 C273 75 271 84 270 90 Z" />
+      <ellipse class="cat-body" cx="268" cy="114" rx="29" ry="44" />
+      <g transform="translate(256 104)"><path class="spark spark--1" d="M0 -8 C1.8 -2.4 3 -1.2 8 0 C3 1.2 1.8 2.4 0 8 C-1.8 2.4 -3 1.2 -8 0 C-3 -1.2 -1.8 -2.4 0 -8 Z" /></g>
+      <g transform="translate(282 104)"><path class="spark spark--2" d="M0 -8 C1.8 -2.4 3 -1.2 8 0 C3 1.2 1.8 2.4 0 8 C-1.8 2.4 -3 1.2 -8 0 C-3 -1.2 -1.8 -2.4 0 -8 Z" /></g>
+    </g>
+  </g>
+  <path class="cat-tail cat-tail--front" d="M208 148 C226 150 234 143 231 136 C229 131 223 132 224 138" />
+
+  <!-- 猫猫趴着的台沿，兼作进度条 -->
+  <g clip-path={`url(#bar-clip-${Astro.uid})`}>
+    <rect class="bar-track" x="6" y="150" width="308" height="14" rx="7" />
+    <rect class="bar-fill" x="6" y="150" width="120" height="14" rx="7" />
+  </g>
+</svg>
+
+<style>
+  .route-loading-cats {
+    display: block;
+    width: var(--route-loading-cat-size, clamp(248px, 60vw, 352px));
+    height: auto;
+    overflow: visible;
+  }
+
+  .cat-body {
+    fill: var(--cat-ink);
+  }
+
+  .cat-stack--sleepy {
+    --cat-ink: color-mix(in oklab, var(--text-color) 78%, var(--page-bg));
+  }
+
+  .cat-stack--right {
+    --cat-ink: color-mix(in oklab, var(--text-color) 64%, var(--page-bg));
+  }
+
+  .cat-stack--left {
+    --cat-ink: color-mix(in oklab, var(--text-color) 56%, var(--page-bg));
+  }
+
+  .cat-stack--front {
+    --cat-ink: color-mix(in oklab, var(--text-color) 88%, var(--page-bg));
+  }
+
+  .cat-eye-slit,
+  .cat-eye-dot,
+  .spark {
+    fill: var(--page-bg);
+  }
+
+  .cat-tail {
+    fill: none;
+    stroke-width: 7;
+    stroke-linecap: round;
+    transform-box: fill-box;
+    transform-origin: 10% 90%;
+    animation: route-loading-tail 1.5s ease-in-out infinite;
+  }
+
+  .cat-tail--right {
+    stroke: color-mix(in oklab, var(--text-color) 64%, var(--page-bg));
+  }
+
+  .cat-tail--front {
+    stroke: color-mix(in oklab, var(--text-color) 88%, var(--page-bg));
+    animation-duration: 1.9s;
+    animation-delay: -0.5s;
+  }
+
+  .cat-rig {
+    transform-box: fill-box;
+    transform-origin: 50% 95%;
+    animation: route-loading-bob 3s ease-in-out infinite;
+  }
+
+  .cat-rig--sleepy {
+    animation-duration: 3.8s;
+    animation-delay: -0.8s;
+  }
+
+  .cat-rig--left {
+    animation-duration: 2.9s;
+    animation-delay: -1.6s;
+  }
+
+  .cat-rig--front {
+    animation-duration: 2.5s;
+    animation-delay: -0.4s;
+  }
+
+  .cat-rig--right {
+    animation: route-loading-sway 3.6s ease-in-out infinite;
+    animation-delay: -1.2s;
+  }
+
+  .cat-eye-slit {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+    animation: route-loading-doze 5.4s ease-in-out infinite;
+  }
+
+  .cat-eye-dot {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+    animation: route-loading-blink 4.4s ease-in-out infinite;
+    animation-delay: -1.1s;
+  }
+
+  .spark {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+    animation: route-loading-twinkle 2.3s ease-in-out infinite;
+  }
+
+  .spark--1 {
+    animation-delay: -0.3s;
+  }
+
+  .spark--2 {
+    animation-delay: -1.2s;
+  }
+
+  .spark--3 {
+    animation-delay: -0.8s;
+  }
+
+  .spark--4 {
+    animation-delay: -1.7s;
+  }
+
+  .bar-track {
+    fill: color-mix(in oklab, var(--text-color) 14%, var(--page-bg));
+  }
+
+  .bar-fill {
+    fill: color-mix(in oklab, var(--text-color) 62%, var(--page-bg));
+    transform-box: fill-box;
+    transform-origin: 0% 50%;
+    animation: route-loading-slide 1.4s ease-in-out infinite;
+  }
+
+  :is(.route-loading-overlay:not(.is-active), .route-loading-inline:not(.is-active))
+    :is(.cat-rig, .cat-tail, .cat-eye-slit, .cat-eye-dot, .spark, .bar-fill) {
+    animation-play-state: paused;
+  }
+
+  @keyframes route-loading-bob {
+    0%,
+    100% {
+      transform: translateY(0) scale(1, 1);
+    }
+    50% {
+      transform: translateY(-4px) scale(1.015, 0.985);
+    }
+  }
+
+  @keyframes route-loading-sway {
+    0%,
+    100% {
+      transform: rotate(-3deg);
+    }
+    50% {
+      transform: rotate(3.5deg);
+    }
+  }
+
+  @keyframes route-loading-tail {
+    0%,
+    100% {
+      transform: rotate(-6deg);
+    }
+    50% {
+      transform: rotate(8deg);
+    }
+  }
+
+  @keyframes route-loading-doze {
+    0%,
+    70%,
+    100% {
+      transform: scaleY(1);
+    }
+    80%,
+    88% {
+      transform: scaleY(0.35);
+    }
+  }
+
+  @keyframes route-loading-blink {
+    0%,
+    86%,
+    94%,
+    100% {
+      transform: scaleY(1);
+    }
+    89%,
+    91% {
+      transform: scaleY(0.08);
+    }
+  }
+
+  @keyframes route-loading-twinkle {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    45% {
+      transform: scale(0.55);
+      opacity: 0.45;
+    }
+    65% {
+      transform: scale(0.85);
+      opacity: 0.8;
+    }
+  }
+
+  @keyframes route-loading-slide {
+    0% {
+      transform: translateX(-60%);
+    }
+    100% {
+      transform: translateX(200%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cat-rig,
+    .cat-tail,
+    .cat-eye-slit,
+    .cat-eye-dot,
+    .spark,
+    .bar-fill {
+      animation: none;
+    }
+  }
+</style>
