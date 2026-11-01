@@ -1,5 +1,5 @@
 ---
-// Swup 切页加载层：整页导航用全屏小猫遮罩，标签页切换只在中间内容列覆盖。
+// Swup 切页加载层：整页导航用全屏小猫遮罩，标签页切换只在分类栏下方放一小堆小猫。
 import RouteLoadingCats from "@/components/controls/RouteLoadingCats.astro";
 ---
 
@@ -34,7 +34,7 @@ import RouteLoadingCats from "@/components/controls/RouteLoadingCats.astro";
     runtime.overlay = overlay;
     runtime.inline = document.getElementById("route-loading-inline");
 
-    // 遮罩只盖分类栏以下的内容区，栏本身保持常亮可点。
+    // 小猫贴在分类栏下沿，所以量一下栏底到主列顶部的距离。
     function placeInlineVeil() {
       if (!runtime.inline) return;
       const shell = runtime.inline.parentElement;
@@ -62,7 +62,6 @@ import RouteLoadingCats from "@/components/controls/RouteLoadingCats.astro";
       if (runtime.active) return;
       runtime.active = true;
       runtime.shownAt = performance.now();
-      if (runtime.mode === "inline") placeInlineVeil();
       paint();
       window.clearTimeout(runtime.maxTimer);
       runtime.maxTimer = window.setTimeout(hide, MAX_VISIBLE);
@@ -201,24 +200,23 @@ import RouteLoadingCats from "@/components/controls/RouteLoadingCats.astro";
 </style>
 
 <style is:global>
-  /* 中间内容列的局部加载层：只盖住主列，左右侧栏与导航保持不动。 */
+  /* 中间内容列的局部加载层：只有一堆小猫，不铺任何底色，旧内容照常可见。 */
   #main-column-shell {
     position: relative;
   }
 
-  /* 分类栏要一直可见，所以压在加载层之上（加载层 z-index: 20）。 */
-  #category-bar-wrapper {
-    position: relative;
-    z-index: 25;
-  }
-
   .route-loading-inline {
     position: absolute;
-    inset: var(--route-loading-inline-top, 0px) 0 0;
+    /* 分类栏在切页动画里会整体下移 2rem，多加这点余量保证小猫始终在栏下方 */
+    top: calc(var(--route-loading-inline-top, 59px) + 2.4rem);
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 20;
-    --route-loading-cat-size: clamp(168px, 26vw, 232px);
-    border-radius: 0 0 1.25rem 1.25rem;
-    background: color-mix(in oklab, var(--page-bg) 88%, transparent);
+    --route-loading-cat-size: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -235,18 +233,37 @@ import RouteLoadingCats from "@/components/controls/RouteLoadingCats.astro";
       visibility 0s;
   }
 
-  .route-loading-inline__inner {
-    position: sticky;
-    top: calc(50vh - 80px);
-    display: flex;
-    justify-content: center;
-    padding-top: 1rem;
+  .route-loading-inline .route-loading-text {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.34em;
+    text-transform: lowercase;
+    color: color-mix(in oklab, var(--text-color) 46%, transparent);
+    animation: route-loading-inline-text-pulse 2.2s ease-in-out infinite;
+  }
+
+  .route-loading-inline:not(.is-active) .route-loading-text {
+    animation-play-state: paused;
+  }
+
+  @keyframes route-loading-inline-text-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .route-loading-inline,
     .route-loading-inline.is-active {
       transition: none;
+    }
+
+    .route-loading-inline .route-loading-text {
+      animation: none;
     }
   }
 </style>

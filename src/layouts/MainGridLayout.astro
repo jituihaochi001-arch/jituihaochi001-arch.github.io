@@ -822,11 +822,10 @@ const hasMultipleImages =
                     <slot></slot>
                 </div>
             </main>
-                {/* 标签页切换时的局部加载层：位于 Swup 容器之外，所以换页时不会被替换掉 */}
+                {/* 标签页切换时的小猫：贴在分类栏下方，不铺底色，位于 Swup 容器之外所以换页不会被替换 */}
                 <div id="route-loading-inline" class="route-loading-inline" aria-hidden="true">
-                    <div class="route-loading-inline__inner">
-                        <RouteLoadingCats />
-                    </div>
+                    <RouteLoadingCats />
+                    <span class="route-loading-text">loading</span>
                 </div>
             </div>
 
