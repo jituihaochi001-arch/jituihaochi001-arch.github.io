@@ -61,8 +61,7 @@ export const en: Translation = {
 	[Key.searchFriends]: "Search friends...",
 	[Key.friendsEmpty]: "No friends yet.",
 	[Key.guestbook]: "Guestbook",
-	[Key.guestbookDescription]:
-		"Welcome to leave your mark here, share your thoughts and suggestions",
+	[Key.guestbookDescription]: "Welcome, friends~",
 	[Key.untitled]: "Untitled",
 	[Key.uncategorized]: "Uncategorized",
 	[Key.noTags]: "No Tags",

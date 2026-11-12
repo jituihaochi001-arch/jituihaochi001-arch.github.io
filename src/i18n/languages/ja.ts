@@ -61,8 +61,7 @@ export const ja: Translation = {
 	[Key.searchFriends]: "友達を検索...",
 	[Key.friendsEmpty]: "まだ友達がいません",
 	[Key.guestbook]: "ゲストブック",
-	[Key.guestbookDescription]:
-		"ここに足跡を残して、あなたの考えや提案を共有してください",
+	[Key.guestbookDescription]: "同好の書き込みを歓迎します～",
 	[Key.untitled]: "無題",
 	[Key.uncategorized]: "未分類",
 	[Key.noTags]: "タグなし",

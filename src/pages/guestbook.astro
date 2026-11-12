@@ -1,6 +1,5 @@
 ---
-import { getEntry, render } from "astro:content";
-import Markdown from "@components/common/Markdown.astro";
+import { getEntry } from "astro:content";
 import { Icon } from "astro-icon/components";
 import { siteConfig } from "@/config";
 import I18nKey from "@/i18n/i18nKey";
@@ -18,40 +17,357 @@ if (!guestbookPost) {
 	throw new Error("guestbook page content not found");
 }
 
-const { Content } = await render(guestbookPost);
+// 每行一条留言（Markdown 引用），单条最多展示 15 个字
+const notes = (guestbookPost.body ?? "")
+	.split(/\r?\n/)
+	.map((line) => line.trim())
+	.filter((line) => line.startsWith(">"))
+	.map((line) => line.replace(/^>\s?/, "").trim())
+	.filter(Boolean)
+	.map((text) => [...text].slice(0, 15).join(""));
 
 // 页面标题和描述
 const title = i18n(I18nKey.guestbook);
-const description = i18n(I18nKey.guestbookDescription);
+const greeting = i18n(I18nKey.guestbookDescription);
+
+const skins = ["butter", "rose", "sky", "mint", "peach", "lilac"];
+const tilts = [-2.4, 1.9, -1.3, 2.8, -2, 1.5, -2.7, 2.2];
 ---
 
-<MainGridLayout title={title} description={description}>
+<MainGridLayout title={title} description={greeting}>
   <div
     class="flex w-full rounded-(--radius-large) overflow-hidden relative min-h-32"
   >
-    <div class="card-base z-10 px-9 py-6 relative w-full">
+    <div class="card-base z-10 px-6 py-7 md:px-9 md:py-8 relative w-full">
       <!-- 页面标题和描述 -->
-      <div class="mb-8">
-        <div class="flex items-center gap-3 mb-3">
-          <div class="h-8 w-8 rounded-lg bg-(--primary) flex items-center justify-center text-white dark:text-black/70">
-            <Icon is:inline name="material-symbols:chat" class="text-[1.5rem]"></Icon>
-          </div>
-          <div class="text-3xl font-bold text-neutral-900 dark:text-neutral-100">
-            {title}
-          </div>
+      <header class="guestbook-head">
+        <div class="guestbook-badge" aria-hidden="true">
+          <Icon
+            is:inline
+            name="material-symbols:sticky-note-2"
+            class="text-[1.45rem]"
+          />
         </div>
-        {description && (
-          <p class="text-base text-neutral-600 dark:text-neutral-400 leading-relaxed mb-4">
-            {description}
-          </p>
-        )}
-      </div>
-      
-      <Markdown class="mt-2">
-        <Content />
-      </Markdown>
+        <div class="guestbook-head__text">
+          <h1 class="guestbook-title">{title}</h1>
+          {greeting && <p class="guestbook-greeting">{greeting}</p>}
+        </div>
+      </header>
+
+      <!-- 黑板留言墙：纯展示，不开放提交 -->
+      <section class="board" aria-label={title}>
+        <div class="board__surface">
+          {
+            notes.length > 0 ? (
+              <ul class="notes">
+                {notes.map((text, index) => (
+                  <li
+                    class:list={[
+                      "note",
+                      `note--${skins[index % skins.length]}`,
+                    ]}
+                    style={`--tilt:${tilts[index % tilts.length]}deg;`}
+                  >
+                    <span class="note__text">{text}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p class="board__empty">还没有留言，黑板先空着。</p>
+            )
+          }
+        </div>
+        <div class="board__tray" aria-hidden="true">
+          <span class="chalk"></span>
+          <span class="chalk chalk--pink"></span>
+        </div>
+      </section>
     </div>
   </div>
-
-  <!-- 留言墙为纯展示，不开放公网提交 -->
 </MainGridLayout>
+
+<style>
+  /* pure 主题下标题由卡片内承担，避免出现两个「留言板」 */
+  :global(
+    html[data-site-theme="pure"]
+      .pure-page[data-pure-page="guestbook"]
+      .pure-page-title
+  ) {
+    display: none;
+  }
+
+  .guestbook-head {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .guestbook-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.65rem;
+    background: var(--primary);
+    color: #fff;
+  }
+
+  :global(.dark) .guestbook-badge {
+    color: rgba(0, 0, 0, 0.72);
+  }
+
+  .guestbook-title {
+    font-size: clamp(1.6rem, 3vw, 1.9rem);
+    line-height: 1.25;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text-color);
+    text-wrap: balance;
+  }
+
+  .guestbook-greeting {
+    margin-top: 0.2rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--text-color);
+    opacity: 0.68;
+  }
+
+  .board {
+    margin-top: 1.6rem;
+    padding: 11px;
+    border-radius: 14px;
+    background: linear-gradient(
+      145deg,
+      #8a623d 0%,
+      #6c4a2c 38%,
+      #7d5837 62%,
+      #553921 100%
+    );
+    box-shadow:
+      0 18px 36px -24px rgba(0, 0, 0, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      inset 0 -2px 6px rgba(0, 0, 0, 0.35);
+  }
+
+  .board__surface {
+    position: relative;
+    min-height: 320px;
+    padding: clamp(1.5rem, 4vw, 2.75rem);
+    border-radius: 6px;
+    background-color: #223a2d;
+    background-image:
+      radial-gradient(
+        circle at 18% 26%,
+        rgba(255, 255, 255, 0.05) 0 1px,
+        transparent 1.6px
+      ),
+      radial-gradient(
+        circle at 72% 64%,
+        rgba(255, 255, 255, 0.04) 0 1px,
+        transparent 1.4px
+      ),
+      radial-gradient(
+        120% 90% at 30% 0%,
+        rgba(255, 255, 255, 0.055),
+        transparent 62%
+      );
+    background-size:
+      132px 108px,
+      178px 146px,
+      100% 100%;
+    box-shadow:
+      inset 0 0 0 1px rgba(0, 0, 0, 0.45),
+      inset 0 0 70px rgba(0, 0, 0, 0.55);
+    overflow: hidden;
+  }
+
+  .board__surface::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      60% 40% at 82% 92%,
+      rgba(255, 255, 255, 0.04),
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  .board__tray {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    height: 14px;
+    margin: 0 -11px -11px;
+    padding: 2px 1.5rem 0;
+    border-radius: 0 0 13px 13px;
+    background: linear-gradient(180deg, #6f4d30, #4a301c);
+    box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.45);
+  }
+
+  .chalk {
+    display: block;
+    width: 48px;
+    height: 6px;
+    border-radius: 3px;
+    background: #e8e2d2;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+  }
+
+  .chalk--pink {
+    width: 30px;
+    background: #e2b3b7;
+  }
+
+  .notes {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(158px, 1fr));
+    gap: clamp(1rem, 2.4vw, 1.6rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .note {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 128px;
+    padding: 1.7rem 0.85rem 1.2rem;
+    border-radius: 3px 3px 9px 3px;
+    background: var(--paper);
+    color: #3a3327;
+    text-align: center;
+    font-size: clamp(0.9rem, 1.2vw, 0.98rem);
+    font-weight: 600;
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+    overflow-wrap: anywhere;
+    transform: rotate(var(--tilt));
+    box-shadow:
+      0 7px 16px -6px rgba(0, 0, 0, 0.55),
+      inset 0 -22px 30px -26px rgba(80, 54, 20, 0.55);
+    transition:
+      transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* 胶带 */
+  .note::before {
+    content: "";
+    position: absolute;
+    top: -9px;
+    left: 50%;
+    width: 64px;
+    height: 18px;
+    transform: translateX(-50%) rotate(-3.5deg);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 1px;
+    background: rgba(250, 247, 238, 0.48);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16);
+  }
+
+  /* 右下折角 */
+  .note::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 0 0 9px 0;
+    background: linear-gradient(
+      135deg,
+      transparent 0 50%,
+      rgba(0, 0, 0, 0.1) 50% 100%
+    );
+  }
+
+  .note--butter {
+    --paper: #f7e6a1;
+  }
+
+  .note--rose {
+    --paper: #f5c6cf;
+  }
+
+  .note--sky {
+    --paper: #bfd9ee;
+  }
+
+  .note--mint {
+    --paper: #c8e4bd;
+  }
+
+  .note--peach {
+    --paper: #f7cda7;
+  }
+
+  .note--lilac {
+    --paper: #d9cdf1;
+  }
+
+  .note:hover,
+  .note:focus-visible {
+    z-index: 2;
+    transform: rotate(0deg) translateY(-4px);
+    box-shadow:
+      0 14px 24px -8px rgba(0, 0, 0, 0.6),
+      inset 0 -22px 30px -26px rgba(80, 54, 20, 0.55);
+  }
+
+  .board__empty {
+    position: relative;
+    z-index: 1;
+    padding: 4.5rem 0;
+    text-align: center;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.42);
+    letter-spacing: 0.08em;
+  }
+
+  @media (max-width: 640px) {
+    .board {
+      padding: 8px;
+    }
+
+    .board__surface {
+      min-height: 280px;
+      padding: 1.15rem;
+    }
+
+    .board__tray {
+      margin: 0 -8px -8px;
+      padding-left: 1rem;
+    }
+
+    .notes {
+      grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+      gap: 1rem;
+    }
+
+    .note {
+      min-height: 112px;
+      padding: 1.5rem 0.75rem 1rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .note {
+      transition: none;
+    }
+
+    .note:hover,
+    .note:focus-visible {
+      transform: rotate(var(--tilt));
+    }
+  }
+</style>

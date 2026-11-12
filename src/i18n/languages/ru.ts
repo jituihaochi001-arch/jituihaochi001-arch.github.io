@@ -61,8 +61,7 @@ export const ru: Translation = {
 	[Key.searchFriends]: "Поиск друзей...",
 	[Key.friendsEmpty]: "Друзей пока нет.",
 	[Key.guestbook]: "Гостевая книга",
-	[Key.guestbookDescription]:
-		"Добро пожаловать, оставьте свой след здесь, поделитесь своими мыслями и предложениями",
+	[Key.guestbookDescription]: "Добро пожаловать, друзья~",
 	[Key.untitled]: "Без названия",
 	[Key.uncategorized]: "Без категории",
 	[Key.noTags]: "Нет тегов",
