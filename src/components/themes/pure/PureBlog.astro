@@ -20,7 +20,7 @@ const tags = allTags.slice(0, 50);
 ---
 
 <div class="pure-blog" data-theme-only="pure" data-pagefind-ignore="all">
-	<h1 class="pure-page-title">{heading}</h1>
+	{heading && <h1 class="pure-page-title">{heading}</h1>}
 	<div class="pure-blog__grid">
 		<section class="pure-blog__posts" aria-label="博客文章">
 			<div class="pure-blog__summary"><p>第 {page.currentPage} 页 · 本页 {page.data.length} 篇，共 {page.total} 篇</p><a href={url("/archive/")}>按年份查看全部文章 →</a></div>
