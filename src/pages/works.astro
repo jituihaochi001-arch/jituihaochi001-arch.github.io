@@ -5,6 +5,8 @@ import CategoryBar from "@/components/layout/CategoryBar.astro";
 import PostPage from "@/components/layout/PostPage.astro";
 import PureBlog from "@/components/themes/pure/PureBlog.astro";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import I18nKey from "@i18n/i18nKey";
+import { i18n } from "@i18n/translation";
 import { getSortedPosts } from "@/utils/content-utils";
 
 const posts = await getSortedPosts();
@@ -34,5 +36,36 @@ const page = {
   <PureBlog page={page} heading="作品" />
   <div data-theme-only="tasty-chicken">
     <PostPage page={page} />
+    <div id="works-empty-state" hidden>
+      <div class="works-empty">
+        <div class="works-empty-icon flex items-center justify-center w-20 h-20 rounded-full">
+          <svg class="w-11 h-11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3.5 8.5 5 4.5h14l1.5 4" />
+            <path d="M3.5 8.5h17V18a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 18z" />
+            <path d="M9.5 12.5h5" />
+          </svg>
+        </div>
+        <p class="text-lg font-bold text-75">{i18n(I18nKey.archiveEmptyTitle)}</p>
+        <p class="max-w-sm text-sm leading-relaxed text-50">{i18n(I18nKey.archiveEmptyHint)}</p>
+      </div>
+    </div>
   </div>
 </MainGridLayout>
+
+<style>
+  #works-empty-state {
+    padding: 3.5rem 1rem;
+  }
+  .works-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.9rem;
+    text-align: center;
+  }
+  .works-empty-icon {
+    color: var(--primary);
+    background: var(--btn-plain-bg-hover);
+    border: 1px dashed var(--glass-control-border);
+  }
+</style>

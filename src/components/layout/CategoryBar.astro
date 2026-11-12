@@ -3,7 +3,7 @@ import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import { Icon } from "astro-icon/components";
 import { getCategoryList, getSortedPostsList, type Category } from "@/utils/content-utils";
-import { getCategoryUrl, url } from "@/utils/url-utils";
+import { url } from "@/utils/url-utils";
 import { worksCategories } from "@/config/worksConfig";
 
 interface Props {
@@ -16,6 +16,12 @@ const { currentPostCategory, variant = "default" } = Astro.props as Props;
 const allPosts = await getSortedPostsList();
 const totalPosts = allPosts.length;
 
+const homeUrl = url("/");
+const worksUrl = url("/works/");
+// 作品页的「全部」和分类都指向作品页自身，用 ?category= 在页内过滤，绝不跳到文章页。
+const archiveUrl = variant === "works" ? worksUrl : url("/archive/");
+const archiveLabel = variant === "works" ? i18n(I18nKey.all) : i18n(I18nKey.archive);
+
 // 作品页按功能分类（固定顺序、含 0 计数）；其它页面沿用博客分类。
 let categories: Category[];
 const categoryIcons: Record<string, string> = {};
@@ -27,20 +33,21 @@ if (variant === "works") {
 	}
 	categories = worksCategories.map((c) => {
 		categoryIcons[c.name] = c.icon;
-		return { name: c.name, count: counts.get(c.name) ?? 0, url: getCategoryUrl(c.name) };
+		return {
+			name: c.name,
+			count: counts.get(c.name) ?? 0,
+			url: `${worksUrl}?category=${encodeURIComponent(c.name)}`,
+		};
 	});
 } else {
 	categories = await getCategoryList();
 }
-
-const homeUrl = url("/");
-const archiveUrl = url("/archive/");
-const archiveLabel = variant === "works" ? i18n(I18nKey.all) : i18n(I18nKey.archive);
 ---
 
 <div
   class="card-base category-bar p-3 onload-animation"
   id="category-bar"
+  data-variant={variant}
   data-home-path={homeUrl}
   data-archive-path={archiveUrl}
   data-current-post-category={currentPostCategory || ""}
@@ -211,7 +218,9 @@ const archiveLabel = variant === "works" ? i18n(I18nKey.all) : i18n(I18nKey.arch
   let delayedCategoryBarScrollTimer: number | undefined;
 
   function getCategoryBarState(bar: HTMLElement, currentUrl: URL) {
-    const pathname = currentUrl.pathname.replace(/\/$/, "");
+    const pathname = currentUrl.pathname
+      .replace(/\/index\.html$/, "")
+      .replace(/\/$/, "");
     const homePath = (bar.getAttribute("data-home-path") || "/").replace(/\/$/, "");
     const archivePath = (bar.getAttribute("data-archive-path") || "/archive").replace(/\/$/, "");
     const isHome = pathname === homePath || pathname === "" || pathname === "/";
@@ -275,6 +284,29 @@ const archiveLabel = variant === "works" ? i18n(I18nKey.all) : i18n(I18nKey.arch
     }
   }
 
+  // 作品页的分类只是页内过滤，不跳转到文章页。这里按 ?category= 隐藏不匹配的卡片。
+  function applyWorksCategoryFilter(bar: HTMLElement, currentUrl: URL) {
+    if (bar.getAttribute("data-variant") !== "works") return;
+    const container = document.getElementById("post-list-container");
+    if (!container) return;
+
+    const activeCategory = (currentUrl.searchParams.get("category") || "").trim();
+    const cards = container.querySelectorAll<HTMLElement>(".post-card-item");
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+      const category = (card.getAttribute("data-post-category") || "").trim();
+      const isVisible = !activeCategory || category === activeCategory;
+      card.style.display = isVisible ? "" : "none";
+      if (isVisible) visibleCount += 1;
+    });
+
+    const emptyState = document.getElementById("works-empty-state");
+    if (emptyState) {
+      emptyState.hidden = !(activeCategory && visibleCount === 0);
+    }
+  }
+
   function scrollActiveCategoryIntoView(bar: HTMLElement, behavior: ScrollBehavior = "smooth") {
     const activePill =
       bar.querySelector<HTMLAnchorElement>('.category-pill[data-active]') ||
@@ -307,6 +339,7 @@ const archiveLabel = variant === "works" ? i18n(I18nKey.all) : i18n(I18nKey.arch
     }
 
     setActiveCategory(bar, currentUrl);
+    applyWorksCategoryFilter(bar, currentUrl);
 
     const deferScroll = options.deferScroll ?? shouldDeferCategoryScroll(bar, currentUrl);
     const scrollBehavior = options.scrollBehavior ?? (deferScroll ? "auto" : "smooth");
@@ -359,6 +392,24 @@ const archiveLabel = variant === "works" ? i18n(I18nKey.all) : i18n(I18nKey.arch
 
       const targetUrl = new URL(pill.href, window.location.href);
       if (targetUrl.origin !== window.location.origin) return;
+
+      // 作品页的分类是页内过滤，不参与路由：拦下点击，交给 Swup 之前就结束。
+      // 这样既不会跳到文章页，也不会发起一次同路径 + query 的 Swup 访问。
+      if (bar.getAttribute("data-variant") === "works") {
+        const name = pill.getAttribute("data-category-name") || "";
+        const isWorksFilterPill = name === "__archive__" || (!!name && name !== "__categories__");
+        if (isWorksFilterPill) {
+          event.preventDefault();
+          event.stopPropagation();
+          const filterUrl = new URL(window.location.href);
+          if (name === "__archive__") filterUrl.searchParams.delete("category");
+          else filterUrl.searchParams.set("category", name);
+          setActiveCategory(bar, filterUrl);
+          applyWorksCategoryFilter(bar, filterUrl);
+          scrollActiveCategoryIntoView(bar, "auto");
+          return;
+        }
+      }
 
       setActiveCategory(bar, targetUrl);
       scrollActiveCategoryIntoView(bar, "auto");
