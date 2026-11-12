@@ -4,7 +4,7 @@ import { onMount } from "svelte";
 import { siteConfig } from "@/config";
 import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
-import { getPostUrlBySlug } from "@/utils/url-utils";
+import { getPostUrlBySlug, url } from "@/utils/url-utils";
 
 export let tags: string[] = [];
 export let categories: string[] = [];
@@ -36,6 +36,7 @@ interface ActiveFilter {
 }
 
 let groups: Group[] = [];
+let ready = false;
 let activeFilters: ActiveFilter[] = [];
 let primaryFilter: ActiveFilter | null = null;
 let secondaryFilters: ActiveFilter[] = [];
@@ -193,6 +194,8 @@ onMount(async () => {
 			}, 260);
 		}
 	}
+
+	ready = true;
 });
 </script>
 
@@ -300,10 +303,38 @@ onMount(async () => {
 			{/if}
 		</div>
 	{/each}
+
+	{#if ready && groups.length === 0}
+		<div class="flex flex-col items-center gap-4 py-16 text-center">
+			<div class="archive-empty-icon flex items-center justify-center w-20 h-20 rounded-full">
+				<svg class="w-11 h-11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+				     stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<path d="M3.5 8.5 5 4.5h14l1.5 4" />
+					<path d="M3.5 8.5h17V18a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 18z" />
+					<path d="M9.5 12.5h5" />
+				</svg>
+			</div>
+			<p class="text-lg font-bold text-75">{i18n(I18nKey.archiveEmptyTitle)}</p>
+			<p class="max-w-sm text-sm leading-relaxed text-50">{i18n(I18nKey.archiveEmptyHint)}</p>
+			<a href={url("/archive/")}
+			   class="btn-regular mt-1 h-10 gap-1.5 rounded-lg px-5 text-sm font-semibold">
+				<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+				     stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<path d="M19 12H5" /><path d="m11 6-6 6 6 6" />
+				</svg>
+				{i18n(I18nKey.all)}
+			</a>
+		</div>
+	{/if}
 </div>
 
 <style>
 	.archive-arrow {
 		display: inline-flex;
+	}
+	.archive-empty-icon {
+		color: var(--primary);
+		background: var(--btn-plain-bg-hover);
+		border: 1px dashed var(--glass-control-border);
 	}
 </style>

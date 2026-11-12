@@ -5,6 +5,8 @@ export const ru: Translation = {
 	[Key.home]: "Главная",
 	[Key.about]: "О нас",
 	[Key.archive]: "Архив",
+	[Key.archiveEmptyTitle]: "В этой категории пока нет работ",
+	[Key.archiveEmptyHint]: "Новые работы уже в пути. Посмотрите другую категорию или вернитесь ко всем работам.",
 	[Key.search]: "Поиск",
 	[Key.searchNoResults]: "Результаты не найдены.",
 	[Key.searchTypeSomething]: "Введите ключевое слово для поиска...",

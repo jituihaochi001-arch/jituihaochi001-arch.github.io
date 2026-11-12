@@ -5,6 +5,8 @@ export const ja: Translation = {
 	[Key.home]: "ホーム",
 	[Key.about]: "について",
 	[Key.archive]: "アーカイブ",
+	[Key.archiveEmptyTitle]: "このカテゴリにはまだ作品がありません",
+	[Key.archiveEmptyHint]: "新しい作品を準備中です。他のカテゴリを見るか、すべての作品に戻ってください。",
 	[Key.search]: "検索",
 	[Key.searchNoResults]: "結果が見つかりません。",
 	[Key.searchTypeSomething]: "検索キーワードを入力してください。",

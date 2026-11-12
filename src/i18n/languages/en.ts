@@ -5,6 +5,8 @@ export const en: Translation = {
 	[Key.home]: "Home",
 	[Key.about]: "About",
 	[Key.archive]: "Archive",
+	[Key.archiveEmptyTitle]: "No works in this category yet",
+	[Key.archiveEmptyHint]: "New work is on the way. Browse another category, or view all works.",
 	[Key.search]: "Search",
 	[Key.searchNoResults]: "No results found.",
 	[Key.searchTypeSomething]: "Type something to search...",

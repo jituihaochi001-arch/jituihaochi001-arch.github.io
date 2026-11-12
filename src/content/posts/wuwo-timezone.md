@@ -7,7 +7,7 @@ image: /assets/images/jitui/work-timezone.jpg
 imageColor: "#a9c4e6"
 video: /assets/videos/wuwo-timezone-pv.mp4
 tags: ["Godot", "GDScript", "GameJam"]
-category: Godot
+category: 游戏
 comment: false
 ---
 

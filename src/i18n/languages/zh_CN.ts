@@ -5,6 +5,8 @@ export const zh_CN: Translation = {
 	[Key.home]: "主页",
 	[Key.about]: "关于我",
 	[Key.archive]: "归档",
+	[Key.archiveEmptyTitle]: "这个分类还没有作品",
+	[Key.archiveEmptyHint]: "作品正在路上，先看看其它分类，或返回全部作品。",
 	[Key.search]: "搜索",
 	[Key.searchNoResults]: "找不到相关结果。",
 	[Key.searchTypeSomething]: "请输入搜索关键词。",

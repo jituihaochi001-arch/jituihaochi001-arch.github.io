@@ -6,7 +6,7 @@ aiPolished: false
 image: /assets/images/jitui/work-arpg.jpg
 imageColor: "#8fbfe0"
 tags: ["Unity", "C#", "ARPG"]
-category: Unity
+category: 游戏
 comment: false
 ---
 

@@ -6,7 +6,7 @@ aiPolished: false
 image: /assets/images/jitui/work-shooter.jpg
 imageColor: "#93b8d6"
 tags: ["Unity", "URP", "射击"]
-category: Unity
+category: 游戏
 comment: false
 ---
 

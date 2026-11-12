@@ -5,6 +5,8 @@ export const zh_TW: Translation = {
 	[Key.home]: "首頁",
 	[Key.about]: "關於我",
 	[Key.archive]: "歸檔",
+	[Key.archiveEmptyTitle]: "這個分類還沒有作品",
+	[Key.archiveEmptyHint]: "作品正在路上，先看看其它分類，或返回全部作品。",
 	[Key.search]: "搜尋",
 	[Key.searchNoResults]: "找不到相關結果。",
 	[Key.searchTypeSomething]: "請輸入搜尋關鍵字。",

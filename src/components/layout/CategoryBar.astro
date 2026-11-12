@@ -2,19 +2,40 @@
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import { Icon } from "astro-icon/components";
-import { getCategoryList, getSortedPostsList } from "@/utils/content-utils";
-import { url } from "@/utils/url-utils";
+import { getCategoryList, getSortedPostsList, type Category } from "@/utils/content-utils";
+import { getCategoryUrl, url } from "@/utils/url-utils";
+import { worksCategories } from "@/config/worksConfig";
 
 interface Props {
 	currentPostCategory?: string;
+	variant?: "default" | "works";
 }
 
-const { currentPostCategory } = Astro.props as Props;
+const { currentPostCategory, variant = "default" } = Astro.props as Props;
 
-const categories = await getCategoryList();
-const totalPosts = (await getSortedPostsList()).length;
+const allPosts = await getSortedPostsList();
+const totalPosts = allPosts.length;
+
+// 作品页按功能分类（固定顺序、含 0 计数）；其它页面沿用博客分类。
+let categories: Category[];
+const categoryIcons: Record<string, string> = {};
+if (variant === "works") {
+	const counts = new Map<string, number>();
+	for (const post of allPosts) {
+		const name = (post.data.category ?? "").trim();
+		if (name) counts.set(name, (counts.get(name) ?? 0) + 1);
+	}
+	categories = worksCategories.map((c) => {
+		categoryIcons[c.name] = c.icon;
+		return { name: c.name, count: counts.get(c.name) ?? 0, url: getCategoryUrl(c.name) };
+	});
+} else {
+	categories = await getCategoryList();
+}
+
 const homeUrl = url("/");
 const archiveUrl = url("/archive/");
+const archiveLabel = variant === "works" ? i18n(I18nKey.all) : i18n(I18nKey.archive);
 ---
 
 <div
@@ -41,7 +62,7 @@ const archiveUrl = url("/archive/");
       data-category-name="__archive__"
       data-route-loading="inline"
     >
-      {i18n(I18nKey.archive)}
+      {archiveLabel}
       <span class="pill-count">{totalPosts}</span>
     </a>
     <div class="category-divider shrink-0"></div>
@@ -56,7 +77,11 @@ const archiveUrl = url("/archive/");
                      transition-colors duration-150 ease-out flex items-center justify-center"
               data-category-name={cat.name}
               data-route-loading="inline"
+              data-empty={cat.count === 0 ? "" : undefined}
             >
+              {categoryIcons[cat.name] && (
+                <Icon is:inline name={categoryIcons[cat.name]} class="text-base" />
+              )}
               {cat.name}
               <span class="pill-count">{cat.count}</span>
             </a>
@@ -149,6 +174,12 @@ const archiveUrl = url("/archive/");
     font-weight: 600;
     opacity: 0.65;
     background: transparent;
+  }
+  .category-pill[data-empty] {
+    opacity: 0.55;
+  }
+  .category-pill[data-empty]:hover {
+    opacity: 0.9;
   }
   .category-pill[data-category-name=""] {
     color: var(--primary);
