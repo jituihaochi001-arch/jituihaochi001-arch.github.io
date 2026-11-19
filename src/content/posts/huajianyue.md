@@ -3,7 +3,7 @@ title: 花间月 · 四季桃源
 published: 2026-11-19
 description: 用 Three.js 构建的古风空中小岛，在桃花、夏雨、夕阳与雪夜之间，漫游楼阁与月亮船。
 aiPolished: false
-image: /assets/images/jitui/work-huajianyue.png
+image: /assets/images/jitui/huajianyue-spring-cover.webp
 imageColor: "#b8c6d4"
 video: /assets/videos/huajianyue-seasons.mp4
 tags: ["Three.js", "WebGL", "交互场景"]
