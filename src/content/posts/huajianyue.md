@@ -5,6 +5,7 @@ description: 用 Three.js 构建的古风空中小岛，在桃花、夏雨、夕
 aiPolished: false
 image: /assets/images/jitui/work-huajianyue.png
 imageColor: "#b8c6d4"
+video: /assets/videos/huajianyue-seasons.mp4
 tags: ["Three.js", "WebGL", "交互场景"]
 category: 网站
 comment: false
