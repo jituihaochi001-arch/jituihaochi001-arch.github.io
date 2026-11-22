@@ -2,7 +2,7 @@
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import { Icon } from "astro-icon/components";
-import { getCategoryList, getSortedPostsList, type Category } from "@/utils/content-utils";
+import { getCategoryList, getPostCategories, getSortedPostsList, type Category } from "@/utils/content-utils";
 import { url } from "@/utils/url-utils";
 import { worksCategories } from "@/config/worksConfig";
 
@@ -28,8 +28,9 @@ const categoryIcons: Record<string, string> = {};
 if (variant === "works") {
 	const counts = new Map<string, number>();
 	for (const post of allPosts) {
-		const name = (post.data.category ?? "").trim();
-		if (name) counts.set(name, (counts.get(name) ?? 0) + 1);
+		for (const name of getPostCategories(post.data)) {
+			counts.set(name, (counts.get(name) ?? 0) + 1);
+		}
 	}
 	categories = worksCategories.map((c) => {
 		categoryIcons[c.name] = c.icon;
@@ -295,8 +296,11 @@ if (variant === "works") {
     let visibleCount = 0;
 
     cards.forEach((card) => {
-      const category = (card.getAttribute("data-post-category") || "").trim();
-      const isVisible = !activeCategory || category === activeCategory;
+        const cardCategories = (card.getAttribute("data-post-category") || "")
+        .split("|")
+        .map((name) => name.trim())
+        .filter(Boolean);
+      const isVisible = !activeCategory || cardCategories.includes(activeCategory);
       card.style.display = isVisible ? "" : "none";
       if (isVisible) visibleCount += 1;
     });

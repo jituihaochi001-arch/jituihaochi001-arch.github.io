@@ -10,6 +10,7 @@ export interface Props {
 	published: Date;
 	updated?: Date;
 	category?: string;
+	categories?: string[];
 	tags?: string[];
 	hideUpdateDate?: boolean;
 	hideTagsForMobile?: boolean;
@@ -29,6 +30,7 @@ const {
 	published,
 	updated,
 	category,
+	categories,
 	tags,
 	hideUpdateDate,
 	hideTagsForMobile,
@@ -42,6 +44,12 @@ const {
 	pinned,
 	aiPolished = true,
 } = Astro.props;
+
+const categoryNames = (
+	categories && categories.length > 0 ? categories : category ? [category] : []
+)
+	.map((name) => (name || "").trim())
+	.filter((name, index, list) => name && list.indexOf(name) === index);
 
 const visibleTags =
 	typeof maxTags === "number" ? tags?.slice(0, maxTags) : tags;
@@ -105,15 +113,31 @@ const visibleTags =
         <div class="meta-icon">
           <Icon is:inline name="material-symbols:book-2-outline-rounded" class="text-xl" />
         </div>
-        <div class="flex flex-row flex-nowrap items-center">
-          <a
-            href={getCategoryUrl(category || "")}
-            aria-label={`View all posts in the ${category} category`}
-            class="link-lg transition text-50 text-sm font-medium
-              hover:text-(--primary) dark:hover:text-(--primary) whitespace-nowrap"
-          >
-            {category || i18n(I18nKey.uncategorized)}
-          </a>
+        <div class="flex flex-row flex-wrap items-center">
+          {categoryNames.length === 0 && (
+            <a
+              href={getCategoryUrl("")}
+              class="link-lg transition text-50 text-sm font-medium
+                hover:text-(--primary) dark:hover:text-(--primary) whitespace-nowrap"
+            >
+              {i18n(I18nKey.uncategorized)}
+            </a>
+          )}
+          {categoryNames.map((name, index) => (
+            <>
+              {index > 0 && (
+                <span class="mx-1.5 text-(--meta-divider) text-sm">/</span>
+              )}
+              <a
+                href={getCategoryUrl(name)}
+                aria-label={`View all posts in the ${name} category`}
+                class="link-lg transition text-50 text-sm font-medium
+                  hover:text-(--primary) dark:hover:text-(--primary) whitespace-nowrap"
+              >
+                {name}
+              </a>
+            </>
+          ))}
         </div>
       </div>
     )

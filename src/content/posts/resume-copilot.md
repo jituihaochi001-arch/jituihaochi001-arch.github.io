@@ -8,6 +8,7 @@ imageColor: "#d9d3c7"
 video: /assets/videos/resume-copilot-demo.webm
 tags: ["前端", "AI", "效率工具"]
 category: 工具
+categories: ["网站"]
 comment: false
 ---
 

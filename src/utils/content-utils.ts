@@ -82,6 +82,25 @@ export async function getTagList(): Promise<Tag[]> {
 	return keys.map((key) => ({ name: key, count: countMap[key] }));
 }
 
+/**
+ * 一篇文章可以同时归入多个分类：category 为主分类，categories 为附加分类。
+ * 返回去重后的分类名列表。
+ */
+export function getPostCategories(data: {
+	category?: string | null;
+	categories?: string[] | null;
+}): string[] {
+	const seen = new Set<string>();
+	const result: string[] = [];
+	for (const raw of [data.category ?? "", ...(data.categories ?? [])]) {
+		const name = (raw || "").trim();
+		if (!name || seen.has(name)) continue;
+		seen.add(name);
+		result.push(name);
+	}
+	return result;
+}
+
 export type Category = {
 	name: string;
 	count: number;
@@ -93,19 +112,17 @@ export async function getCategoryList(): Promise<Category[]> {
 		return import.meta.env.PROD ? data.draft !== true : true;
 	});
 	const count: { [key: string]: number } = {};
-	allBlogPosts.forEach((post: { data: { category: string | null } }) => {
-		if (!post.data.category) {
+	allBlogPosts.forEach((post) => {
+		const names = getPostCategories(post.data);
+		if (names.length === 0) {
 			const ucKey = i18n(I18nKey.uncategorized);
 			count[ucKey] = count[ucKey] ? count[ucKey] + 1 : 1;
 			return;
 		}
 
-		const categoryName =
-			typeof post.data.category === "string"
-				? post.data.category.trim()
-				: String(post.data.category).trim();
-
-		count[categoryName] = count[categoryName] ? count[categoryName] + 1 : 1;
+		for (const categoryName of names) {
+			count[categoryName] = count[categoryName] ? count[categoryName] + 1 : 1;
+		}
 	});
 
 	const lst = Object.keys(count).sort((a, b) => {

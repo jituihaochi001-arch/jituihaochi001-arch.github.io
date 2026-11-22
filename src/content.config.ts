@@ -16,6 +16,7 @@ type PostData = {
 	video: string;
 	tags: string[];
 	category: string | null;
+	categories: string[];
 	lang: string;
 	pinned: boolean;
 	pinnedOrder?: number;
@@ -50,6 +51,7 @@ const postsCollection: PostsCollection = defineCollection({
 		video: z.string().optional().default(""),
 		tags: z.array(z.string()).optional().default([]),
 		category: z.string().optional().nullable().default(""),
+		categories: z.array(z.string()).optional().default([]),
 		lang: z.string().optional().default(""),
 		pinned: z.boolean().optional().default(false),
 		pinnedOrder: z.number().optional(),

@@ -7,6 +7,7 @@ import PostMetadata from "@/components/layout/PostMeta.astro";
 import PostStats from "@/components/layout/PostStats.astro";
 import { siteConfig } from "@/config";
 import { getApiUrlList, processCoverImageSync } from "@/utils/image-utils";
+import { getPostCategories } from "@/utils/content-utils";
 import { getFileDirFromPath } from "@/utils/url-utils";
 
 interface Props {
@@ -42,6 +43,7 @@ const {
 	loading = "lazy",
 } = Astro.props;
 const className = Astro.props.class;
+const postCategories = getPostCategories(entry.data);
 
 // 处理随机图：如果image为"api"，则从配置的API获取随机图
 const processedImage = processCoverImageSync(image, entry.id);
@@ -234,7 +236,7 @@ const minutes = remarkPluginFrontmatter.minutes;
     className,
   ]}
   data-card-decor={cardDecor}
-  data-post-category={category || ""}
+  data-post-category={postCategories.join("|")}
   style={style}
 >
   {
@@ -294,6 +296,7 @@ const minutes = remarkPluginFrontmatter.minutes;
       showNoTags={false}
       hideUpdateDate={true}
       category={category || undefined}
+      categories={postCategories}
       pinned={pinned}
       password={password}
       className={`mb-4 post-meta card-header-meta ${isNewSystemPost ? "post-meta-new-system" : ""}`}
