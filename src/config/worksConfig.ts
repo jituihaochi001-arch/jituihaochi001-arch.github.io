@@ -10,4 +10,5 @@ export const worksCategories: WorksCategory[] = [
 	{ name: "网站", icon: "material-symbols:language" },
 	{ name: "应用", icon: "material-symbols:smartphone" },
 	{ name: "工具", icon: "material-symbols:build-outline" },
+	{ name: "其他", icon: "material-symbols:category-outline-rounded" },
 ];
