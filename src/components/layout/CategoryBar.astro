@@ -167,6 +167,15 @@ if (variant === "works") {
   .category-scroll::-webkit-scrollbar {
     display: none;
   }
+
+  /* 作品页分类较多，收紧间距让分类在常见宽度下一行放得下 */
+  .category-bar[data-variant="works"] .category-scroll {
+    gap: 0.375rem;
+  }
+  .category-bar[data-variant="works"] .category-scroll .category-pill {
+    padding-left: 0.625rem;
+    padding-right: 0.625rem;
+  }
   .category-pill {
     border: 1px solid var(--glass-control-border);
     color: var(--primary);
