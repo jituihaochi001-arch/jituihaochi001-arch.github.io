@@ -287,7 +287,7 @@ onMount(async () => {
 									border border-(--glass-control-border) bg-transparent
 									text-(--primary) group-hover:bg-transparent group-hover:text-(--primary)!
 								             transition-colors">
-									{post.data.category}
+									{[post.data.category, ...(post.data.categories ?? [])].filter(Boolean).join(" / ")}
 								</span>
 							{/if}
 							<span class="truncate">{post.data.title}</span>

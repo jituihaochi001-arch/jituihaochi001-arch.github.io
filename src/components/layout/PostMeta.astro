@@ -45,9 +45,7 @@ const {
 	aiPolished = true,
 } = Astro.props;
 
-const categoryNames = (
-	categories && categories.length > 0 ? categories : category ? [category] : []
-)
+const categoryNames = [category ?? "", ...(categories ?? [])]
 	.map((name) => (name || "").trim())
 	.filter((name, index, list) => name && list.indexOf(name) === index);
 
